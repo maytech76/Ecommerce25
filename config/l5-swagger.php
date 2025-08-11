@@ -6,7 +6,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'Music API',
+                'title' => 'MAYDEV API',
                 'description' => 'API REST Ecomerce',
                 'version' => '1.0.0',
                 'termsOfService' => '',
@@ -28,6 +28,14 @@ return [
                 'annotations' => [
                     base_path('app/Models'),
                     base_path('app/Http/Controllers'),
+                ],
+            ],
+
+            // ===== CAMBIO PRINCIPAL: Agregar 'servers' para usar APP_URL =====
+            'servers' => [
+                [
+                    'url' => env('APP_URL') . '/api', // **** Usa APP_URL del .env ****
+                    'description' => 'Servidor principal',
                 ],
             ],
         ],
@@ -61,7 +69,8 @@ return [
         'validator_url' => env('L5_SWAGGER_VALIDATOR_URL', null),
 
         'constants' => [
-            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://localhost:8000'),
+            // ===== CAMBIO OPCIONAL: Eliminar L5_SWAGGER_CONST_HOST si ya usas APP_URL =====
+            'L5_SWAGGER_CONST_HOST' => env('APP_URL'), // Opcional: reemplazar por APP_URL
         ],
 
         'securityDefinitions' => [
@@ -69,5 +78,9 @@ return [
             'security' => [],
         ],
 
+        'securityDefinitions' => [
+            'securitySchemes' => [], // Vacío porque este endpoint no requiere autenticación
+            'security' => []
+        ]
     ],
 ];
