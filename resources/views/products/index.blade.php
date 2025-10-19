@@ -14,7 +14,7 @@
                         <div class="card card-table">
                             <div class="card-body">
                                 <div class="title-header option-title d-sm-flex d-block">
-                                    <h5>Products List</h5>
+                                    <h5>Listado de productos</h5>
                                     <div class="right-options">
                                         <ul>
                                             {{-- <li>
@@ -34,13 +34,13 @@
                                         <table class="table all-package theme-table table-product" id="table_id">
                                             <thead>
                                                 <tr>
-                                                    <th class="col-photo">Photo</th>
-                                                    <th class="col-name">Name</th>
-                                                    <th class="col-category">Category</th>
+                                                    <th class="col-photo">Imagen</th>
+                                                    <th class="col-name">Nombre</th>
+                                                    <th class="col-category">Categoria</th>
                                                     {{-- <th class="col-qty">Qty</th> --}}
-                                                    <th class="col-price">Price</th>
+                                                    <th class="col-price">Precio</th>
                                                     {{-- <th class="col-status">Status</th> --}}
-                                                    <th class="col-actions">Actions</th>
+                                                    <th class="col-actions">Opciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

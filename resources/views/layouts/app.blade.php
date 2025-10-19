@@ -61,6 +61,7 @@
             <i class="iconly-Bag-2 icli"></i>
         </button>
     </div>
+    
     <div class="item-section">
         <button class="close-button">
             <i class="fas fa-times"></i>
