@@ -10,20 +10,18 @@ class ShippingAddressController extends Controller
 {
     public function store(Request $request){
         $request->validate([
+
+            'user_id'=> 'required',
             'address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'zip_code' => 'required',
-            'country' => 'required',
+            'zone_id' => 'required',
+            
         ]);
 
         ShippingAddress::create([
             'user_id' => auth()->id(),
             'address' => $request->address,
-            'city' => $request->city,
-            'state' => $request->state,
-            'zip_code' => $request->zip_code,
-            'country' => $request->country,
+            'zone_id' => $request->zone_id,
+            
         ]);
 
         return redirect()->back()->with('success', 'Dirección agregada correctamente.');
@@ -31,20 +29,17 @@ class ShippingAddressController extends Controller
 
     public function storeAddress(Request $request){
         $request->validate([
+
             'address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'zip_code' => 'required',
-            'country' => 'required',
+            'zone_id' => 'required',
+            
         ]);
 
         ShippingAddress::create([
+
             'user_id' => auth()->id(),
             'address' => $request->address,
-            'city' => $request->city,
-            'state' => $request->state,
-            'zip_code' => $request->zip_code,
-            'country' => $request->country,
+            'zone_id' => $request->zone_id,
         ]);
 
         return redirect()->back()->with('success', 'Dirección guardada correctamente.');
@@ -54,11 +49,9 @@ class ShippingAddressController extends Controller
         $address = ShippingAddress::where('user_id', auth()->id())->findOrFail($id);
 
         $request->validate([
+
             'address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'zip_code' => 'required',
-            'country' => 'required',
+            'zone_id' => 'required',
         ]);
 
         $address->update($request->all());

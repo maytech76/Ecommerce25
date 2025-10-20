@@ -15,14 +15,14 @@ class ProductController extends Controller
 
         $categories = Category::all();
         $products = Product::paginate(20); 
-        return view('products.index', compact('products', 'categories'));
+        return view('admin/products.index', compact('products', 'categories'));
     }
 
     public function create()
     {
         $categories = Category::all();
         $brands = Brand::all();
-        return view('products.create', compact('categories', 'brands'));
+        return view('admin/products.create', compact('categories', 'brands'));
     }
 
     public function store(Request $request)
@@ -67,8 +67,7 @@ class ProductController extends Controller
             ->get();
     }
 
-    public function shop(Request $request)
-    {
+    public function shop(Request $request){
         // Convertir las categorías en un array si están en formato "1,2,3"
         $categoriesFilter = $request->has('categories')
             ? explode(',', $request->input('categories'))

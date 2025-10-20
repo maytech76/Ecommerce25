@@ -23,17 +23,36 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
             </div>
 
+            {{-- Sidebar-Menu --}}
             <div id="sidebar-menu">
                 <ul class="sidebar-links" id="simple-bar" data-simplebar="init" style="display: block;"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
                     <li class="back-btn"></li>
 
                     <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title link-nav active" href="index.html" data-bs-original-title="" title="">
+                        <a class="sidebar-link sidebar-title link-nav active" href="/" data-bs-original-title="" title="">
                             <i class="ri-home-line"></i>
                             <span>Dashboard</span>
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
                     </li>
 
+                     {{-- Categorias --}}
+                     <li class="sidebar-list">
+                        <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
+                            <i class="ri-list-check-2"></i>
+                            <span>Categorias</span>
+                        <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
+                        <ul class="sidebar-submenu" style="display: none;">
+                            <li>
+                                <a href="{{ route('categories.index') }}" data-bs-original-title="" title="">Listado de Categorias</a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('categories.create') }}" data-bs-original-title="" title="">Nueva Categoria</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {{-- Productos --}}
                     <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
                             <i class="ri-store-3-line"></i>
@@ -41,31 +60,17 @@
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
                         <ul class="sidebar-submenu" style="display: none;">
                             <li>
-                                <a href="products.html" data-bs-original-title="" title=""> Listado de Productos</a>
+                                <a href="{{ route('products.index') }}" data-bs-original-title="" title=""> Listado de Productos</a>
                             </li>
 
                             <li>
-                                <a href="add-new-product.html" data-bs-original-title="" title="">Nuevo Producto</a>
+                                <a href="{{ route('products.create') }}" data-bs-original-title="" title="">Nuevo Producto</a>
                             </li>
                         </ul>
                     </li>
 
-                    <li class="sidebar-list">
-                        <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
-                            <i class="ri-list-check-2"></i>
-                            <span>Categorias</span>
-                        <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
-                        <ul class="sidebar-submenu" style="display: none;">
-                            <li>
-                                <a href="category.html" data-bs-original-title="" title="">Listado de Categorias</a>
-                            </li>
 
-                            <li>
-                                <a href="add-new-category.html" data-bs-original-title="" title="">Nueva Categoria</a>
-                            </li>
-                        </ul>
-                    </li>
-
+                    {{-- Atributos de Productos --}}
                     <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
                             <i class="ri-list-settings-line"></i>
@@ -82,6 +87,26 @@
                         </ul>
                     </li>
 
+                    {{-- Ciudades-Zonas --}}
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
+                            <i class="ri-user-3-line"></i>
+                            <span>Ciudades-Zonas</span>
+                        <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
+                        <ul class="sidebar-submenu" style="display: none;">
+                            <li>
+                                <a href="all-users.html" data-bs-original-title="" title="">Listado de Ciudades</a>
+                            </li>
+                            <li>
+                                <a href="all-users.html" data-bs-original-title="" title="">Listado de Zonas</a>
+                            </li>
+                            <li>
+                                <a href="add-new-user.html" data-bs-original-title="" title="">Nueva Ciudad</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {{-- Usuarios --}}
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
                             <i class="ri-user-3-line"></i>
@@ -97,6 +122,7 @@
                         </ul>
                     </li>
 
+                    {{-- Roles de Usuario --}}
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
                             <i class="ri-user-3-line"></i>
@@ -112,6 +138,7 @@
                         </ul>
                     </li>
 
+                    {{-- Comunicacion --}}
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="media.html" data-bs-original-title="" title="">
                             <i class="ri-price-tag-3-line"></i>
@@ -119,6 +146,7 @@
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
                     </li>
 
+                    {{-- Ordenes de Compras --}}
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
                             <i class="ri-archive-line"></i>
@@ -137,6 +165,7 @@
                         </ul>
                     </li>
 
+                    {{-- Localizacion --}}
                     <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
                             <i class="ri-focus-3-line"></i>
@@ -153,6 +182,7 @@
                         </ul>
                     </li>
 
+                    {{-- Cupones --}}
                     <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
                             <i class="ri-price-tag-3-line"></i>
@@ -183,6 +213,7 @@
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
                     </li>
 
+                    {{-- Ticket Soporte --}}
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="support-ticket.html" data-bs-original-title="" title="">
                             <i class="ri-phone-line"></i>
@@ -190,6 +221,7 @@
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
                     </li>
 
+                    {{-- Configuracion --}}
                     <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
                             <i class="ri-settings-line"></i>
@@ -202,6 +234,7 @@
                         </ul>
                     </li>
 
+                    {{-- Reportes --}}
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="reports.html" data-bs-original-title="" title="">
                             <i class="ri-file-chart-line"></i>

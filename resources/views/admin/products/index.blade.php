@@ -3,7 +3,7 @@
 
 @section('content')
 
-@section('title', 'Dashboard')
+@section('title', 'Productos')
 
 <div class="compact-wrapper">
     <div class="page-body-wrapper">
@@ -11,6 +11,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
+                        {{-- card-Principal --}}
                         <div class="card card-table">
                             <div class="card-body">
                                 <div class="title-header option-title d-sm-flex d-block">
