@@ -183,13 +183,13 @@
                                 <div class="product-image">
                                     <div class="label-flex">
                                         <button class="btn p-0 wishlist btn-wishlist notifi-wishlist"
-                                            onclick="addToWishlist({{ $product->id }}, '{{ asset('storage/' . $product->image) }}', '{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}', '{{ $product->price }}' , '{{ $product->name }}')">
+                                            onclick="addToWishlist({{ $product->id }}, '{{ asset('storage/' . $product->main_image) }}', '{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}', '{{ $product->price }}' , '{{ $product->name }}')">
                                             <i class="iconly-Heart icli"></i>
                                         </button>
                                     </div>
 
                                     <a href="{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}">
-                                        <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" alt="{{ $product->name }}">
+                                        <img src="{{ asset('storage/' . $product->main_image) }}" class="img-fluid" alt="{{ $product->name }}">
                                     </a>
 
                                     <ul class="option">
@@ -236,7 +236,7 @@
                                         </div>
 
                                         <button class="buy-button buy-button-2 btn btn-cart"
-                                            onclick="addToCart({{ $product->id }}, '{{ asset('storage/' . $product->image) }}', '{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}', '{{ $product->price }}', '{{ $product->name }}')">
+                                            onclick="addToCart({{ $product->id }}, '{{ asset('storage/' . $product->main_image) }}', '{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}', '{{ $product->price }}', '{{ $product->name }}')">
                                             <i class="iconly-Buy icli text-white m-0"></i>
                                         </button>
                                     </div>
@@ -303,61 +303,61 @@
 </section>
 
 <script>
-function applyFilters() {
-    let url = new URL(window.location.href);
+    function applyFilters() {
+        let url = new URL(window.location.href);
 
-    // Obtener todas las categorías seleccionadas
-    let categories = [];
-    document.querySelectorAll('input[name="categories[]"]:checked').forEach((checkbox) => {
-        categories.push(checkbox.value);
-    });
+        // Obtener todas las categorías seleccionadas
+        let categories = [];
+        document.querySelectorAll('input[name="categories[]"]:checked').forEach((checkbox) => {
+            categories.push(checkbox.value);
+        });
 
-    // Obtener todas las marcas seleccionadas
-    let brands = [];
-    document.querySelectorAll('input[name="brands[]"]:checked').forEach((checkbox) => {
-        brands.push(checkbox.value);
-    });
+        // Obtener todas las marcas seleccionadas
+        let brands = [];
+        document.querySelectorAll('input[name="brands[]"]:checked').forEach((checkbox) => {
+            brands.push(checkbox.value);
+        });
 
-    // Obtener todos los precios seleccionados
-    let prices = [];
-    document.querySelectorAll('input[name="prices[]"]:checked').forEach((checkbox) => {
-        prices.push(checkbox.value);
-    });
+        // Obtener todos los precios seleccionados
+        let prices = [];
+        document.querySelectorAll('input[name="prices[]"]:checked').forEach((checkbox) => {
+            prices.push(checkbox.value);
+        });
 
-    // Obtener todos los ratings seleccionados
-    let ratings = [];
-    document.querySelectorAll('input[name="ratings[]"]:checked').forEach((checkbox) => {
-        ratings.push(checkbox.value);
-    });
+        // Obtener todos los ratings seleccionados
+        let ratings = [];
+        document.querySelectorAll('input[name="ratings[]"]:checked').forEach((checkbox) => {
+            ratings.push(checkbox.value);
+        });
 
-    // Si hay categorías seleccionadas, actualizar la URL correctamente
-    if (categories.length > 0) {
-        url.searchParams.set('categories', categories.join(',')); // Convertir array a string separado por comas
-    } else {
-        url.searchParams.delete('categories'); // Si no hay selección, eliminar el parámetro
+        // Si hay categorías seleccionadas, actualizar la URL correctamente
+        if (categories.length > 0) {
+            url.searchParams.set('categories', categories.join(',')); // Convertir array a string separado por comas
+        } else {
+            url.searchParams.delete('categories'); // Si no hay selección, eliminar el parámetro
+        }
+
+        if (brands.length > 0) {
+            url.searchParams.set('brands', brands.join(','));
+        } else {
+            url.searchParams.delete('brands');
+        }
+
+        if (prices.length > 0) {
+            url.searchParams.set('prices', prices.join(','));
+        } else {
+            url.searchParams.delete('prices');
+        }
+
+        if (ratings.length > 0) {
+            url.searchParams.set('ratings', ratings.join(','));
+        } else {
+            url.searchParams.delete('ratings');
+        }
+
+        // Redirigir a la URL con los filtros aplicados
+        window.location.href = url.toString();
     }
-
-    if (brands.length > 0) {
-        url.searchParams.set('brands', brands.join(','));
-    } else {
-        url.searchParams.delete('brands');
-    }
-
-    if (prices.length > 0) {
-        url.searchParams.set('prices', prices.join(','));
-    } else {
-        url.searchParams.delete('prices');
-    }
-
-    if (ratings.length > 0) {
-        url.searchParams.set('ratings', ratings.join(','));
-    } else {
-        url.searchParams.delete('ratings');
-    }
-
-    // Redirigir a la URL con los filtros aplicados
-    window.location.href = url.toString();
-}
 </script>
 @endsection
 

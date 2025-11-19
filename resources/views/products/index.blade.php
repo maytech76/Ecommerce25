@@ -65,15 +65,12 @@
                                 <thead>
                                     <tr>
                                         <th class="col-photo">Imagen</th>
-                                        <th class="col-photo">CodeBar</th>
                                         <th class="col-name">Nombre</th>
                                         <th class="col-category">Categoria</th>
                                         <th class="col-category">Marca</th>
                                         <th class="col-price">Stock</th>
                                         <th class="col-price">Precio</th>
-                                        <th class="col-price">Utilidad</th>
-                                        <th class="col-price">Precio-2</th>
-                                        <th class="col-price">Utilidad-2</th>
+                                        <th class="col-price">Precio2</th>
                                         <th class="col-actions">Opciones</th>
                                         
                                     </tr>
@@ -90,15 +87,12 @@
                                                      alt="{{ $product->name }}">
                                             </div>
                                         </td>
-                                        <td class="text-nowrap">{{ $product->codebar }}</td>
                                         <td class="text-nowrap">{{ $product->name }}</td>
                                         <td class="text-nowrap">{{ $product->category->name ?? 'N/A' }}</td>
                                         <td class="text-nowrap">{{ $product->brand->name ?? 'N/A' }}</td>
                                         <td class="text-nowrap">{{ $product->stock }}</td>
                                         <td class="td-price">${{ number_format($product->price, 2) }}</td>
-                                        <td class="text-nowrap">{{ $product->utility_percentage }}</td>
                                         <td class="td-price">${{ number_format($product->price2, 2) }}</td>
-                                        <td class="text-nowrap">{{ $product->utility_percentage }}</td>
                                         
                                         <td>
                                             <div class="d-flex gap-2 justify-content-between">
@@ -269,7 +263,7 @@
 <style>
     /* Estilos para compactar la tabla */
     .table-product {
-        width: 100%;
+        width: 90%;
         table-layout: auto;
         border-collapse: separate;
         border-spacing: 0 6px; /* Solo espaciado vertical entre filas */
@@ -278,8 +272,8 @@
     .table-product thead th {
         white-space: nowrap;
         padding: 2px 2px; /* Reducir padding horizontal */
-        font-size: 0.8rem;
-        font-weight: 300;
+        font-size: 0.7rem;
+        font-weight: 500;
     }
 
 

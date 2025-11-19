@@ -20,6 +20,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [ProductController::class, 'shop'])->name('shop.index');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::resource('/products', ProductController::class); // publico
 Route::get('/product/{id}/{slug}', [ProductController::class, 'details'])->name('product.details'); // Cambiado de /{id}/{slug}
 
 Route::middleware('auth')->group(function () {

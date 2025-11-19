@@ -1,4 +1,4 @@
-<script src="{{ asset('backend/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('backend/js/jquery-3.6.0.min.js') }}"></script>
 
     <!-- Bootstrap js -->
     <script src="{{ asset('backend/js/bootstrap/bootstrap.bundle.min.js') }}"></script>

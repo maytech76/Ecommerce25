@@ -25,15 +25,10 @@ class ProductController extends Controller
                 $search = $request->search;
                 $query->where(function($q) use ($search) {
                     $q->where('name', 'LIKE', "%{$search}%")
-                      ->orWhere('description', 'LIKE', "%{$search}%")
-                      ->orWhere('codebar', 'LIKE', "%{$search}%") // ← Nuevo campo agregado
-                      ->orWhere('price', 'LIKE', "%{$search}%")   // ← Nuevo campo agregado
-                      ->orWhereHas('category', function($q) use ($search) {
-                          $q->where('name', 'LIKE', "%{$search}%");
-                      })
-                      ->orWhereHas('brand', function($q) use ($search) { // Opcional: también buscar por marca
-                          $q->where('name', 'LIKE', "%{$search}%");
-                      });
+                    ->orWhere('description', 'LIKE', "%{$search}%")
+                    ->orWhereHas('category', function($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    });
                 });
             }
     
@@ -95,32 +90,29 @@ class ProductController extends Controller
                 
                 'category_id' => 'required|exists:categories,id',
                 'brand_id' => 'required|exists:brands,id',
-                'codebar' => 'nullable|string|max:55|unique:products,codebar',
                 'name' => 'required|string|max:255|unique:products,name',
                 'description' => 'nullable|string',
                 'cost' => 'required|numeric|min:0',
                 'utility_percentage' => 'required|numeric|min:0|max:100',
                 'stock' => 'required|integer|min:0', 
-                'main_image' => 'required|image|mimes:jpeg,png,jpg,gif',
-                'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+                'main_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'unit' => 'required',
-                'video_provider' => 'required|in:youtube,vimeo,tiktok,custom,none',
+                'video_provider' => 'required|in:youtube,vimeo,custom,none',
                 'video_link' => 'nullable|url|required_if:video_provider,youtube,vimeo,custom',
             ]);
 
             Log::debug('ProductController@store - Validación pasada');
 
             $data = $request->only([
-
                 'category_id', 'brand_id', 'name', 'description', 
                 'cost', 'utility_percentage', 'stock', 'unit',
-                'video_provider', 'video_link', 'slug', 'codebar',
-                'price2', 'utility_percentage2', 'profit2'
+                'video_provider', 'video_link'
             ]);
 
-            $data['interchangeable'] = $request->has('interchangeable') ? 1 : 0;
-            $data['refundable'] = $request->has('refundable') ? 1 : 0;
+            $data['interchangeable'] = $request->has('interchangeable');
+            $data['refundable'] = $request->has('refundable');
             $data['status'] = $request->has('status');
 
             Log::debug('ProductController@store - Datos procesados', $data);
@@ -268,17 +260,23 @@ class ProductController extends Controller
                 'name' => 'required|string|max:255|unique:products,name,' . $product->id,
                 'description' => 'nullable|string',
                 'cost' => 'required|numeric|min:0',
-                'utility_percentage' => 'required|numeric|min:0|max:100',
+                'utility_percentage' => 'nullable|numeric|min:0|max:100',
                 'stock' => 'required|integer|min:0',
+                'status' => 'sometimes|string',
                 'main_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'unit' => 'required',
-                'video_provider' => 'required|in:youtube,vimeo,custom,none',
+                'video_provider' => 'nullable|in:youtube,vimeo,custom,none',
                 'video_link' => 'nullable|url|required_if:video_provider,youtube,vimeo,custom',
             ]);
 
             Log::debug('ProductController@update - Validación pasada');
+
+            // Agrega un valor por defecto para status si no viene en la request
+            if (!isset($validated['status'])) {
+                $validated['status'] = 'active'; // o el valor por defecto que uses
+            }
 
             $data = $request->only([
                 'category_id', 'brand_id', 'name', 'description', 
@@ -418,7 +416,7 @@ class ProductController extends Controller
         }
     }
 
-    /* public function details($id, $slug){
+    public function details($id, $slug){
 
         Log::info('ProductController@details - Mostrando detalles', ['id' => $id, 'slug' => $slug]);
         
@@ -501,79 +499,6 @@ class ProductController extends Controller
             ]);
             throw $e;
         }
-    } */
-
-    public function details($id, $slug){
-        // Buscar el producto
-        $product = Product::where('id', $id)->where('slug', $slug)->firstOrFail();
-
-        // Obtener los 6 productos más vendidos
-        $topSellingProducts = $this->getTopSellingProducts(6);
-
-        return view('products.details', compact('product', 'topSellingProducts'));
-    }
-
-    public function getTopSellingProducts($limit = 6){
-        return Product::withCount('orderItems') // Contar la cantidad de veces que un producto fue vendido
-            ->orderByDesc('order_items_count') // Ordenar por los más vendidos
-            ->take($limit) // Tomar solo los productos que se necesiten
-            ->get();
-    }
-
-    public function shop(Request $request){
-        // Convertir las categorías en un array si están en formato "1,2,3"
-        $categoriesFilter = $request->has('categories')
-            ? explode(',', $request->input('categories'))
-            : [];
-
-        $brandsFilter = $request->has('brands')
-            ? explode(',', $request->input('brands'))
-            : [];
-
-        $pricesFilter = $request->has('prices')
-            ? explode(',', $request->input('prices'))
-            : [];
-
-        $ratingsFilter = $request->has('ratings')
-            ? explode(',', $request->input('ratings'))
-            : [];
-
-        $search = $request->input('search'); // Obtener texto de búsqueda
-
-        // Consultar productos con filtro de categorías múltiple
-        $products = Product::with('category')
-            ->when(!empty($categoriesFilter), function ($query) use ($categoriesFilter) {
-                return $query->whereIn('category_id', $categoriesFilter);
-            })
-            ->when(!empty($brandsFilter), function ($query) use ($brandsFilter) {
-                return $query->whereIn('brand_id', $brandsFilter);
-            })
-            ->when(!empty($pricesFilter), function ($query) use ($pricesFilter) {
-                return $query->where(function ($q) use ($pricesFilter) {
-                    foreach ($pricesFilter as $priceRange) {
-                        [$min, $max] = explode('-', $priceRange);
-                        $q->orWhereBetween('price', [(int)$min, (int)$max]);
-                    }
-                });
-            })
-            ->when(!empty($ratingsFilter), function ($query) use ($ratingsFilter) {
-                return $query->whereIn('id', function ($subQuery) use ($ratingsFilter) {
-                    $subQuery->select('product_id')
-                        ->from('reviews')
-                        ->groupBy('product_id')
-                        ->havingRaw('AVG(rating) IN (' . implode(',', array_map('intval', $ratingsFilter)) . ')');
-                });
-            })
-            ->when(!empty($search), function ($query) use ($search) {
-                return $query->where('name', 'LIKE', "%{$search}%");
-            })
-            ->paginate(12); // Se mantiene la paginación
-
-        // Obtener todas las categorías para los filtros
-        $categories = Category::all();
-        $brands = Brand::all();
-
-        return view('shop.index', compact('products','brands', 'categories', 'categoriesFilter', 'brandsFilter','pricesFilter','ratingsFilter', 'search'));
     }
 
 }

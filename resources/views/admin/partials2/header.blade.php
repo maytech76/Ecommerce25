@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <form class="form-inline search-full" action="javascript:void(0)" method="get">
+        {{-- <form class="form-inline search-full" action="javascript:void(0)" method="get">
             <div class="form-group w-100">
                 <div class="Typeahead Typeahead--twitterUsers">
                     <div class="u-posRelative">
@@ -28,7 +28,7 @@
                     <div class="Typeahead-menu"></div>
                 </div>
             </div>
-        </form>
+        </form> --}}
         <div class="nav-right col-6 pull-right right-header p-0">
             <ul class="nav-menus">
                 <li>
@@ -36,7 +36,7 @@
                         <i class="ri-search-line"></i>
                     </span>
                 </li>
-                <li class="onhover-dropdown">
+                {{--  <li class="onhover-dropdown">
                     <div class="notification-box">
                         <i class="ri-notification-line"></i>
                         <span class="badge rounded-pill badge-theme">4</span>
@@ -70,7 +70,7 @@
                             <a class="btn btn-primary" href="javascript:void(0)">Check all notification</a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
                 <li>
                     <div class="mode">
@@ -79,7 +79,7 @@
                 </li>
                 <li class="profile-nav onhover-dropdown pe-0 me-0">
                     <div class="media profile-media">
-                    {{-- <img class="user-profile rounded-circle" src="{{asset('backend/images/users/4.jpg')}}" alt=""> --}}
+                     <img class="user-profile rounded-circle" src="{{asset('backend/images/users/4.jpg')}}" alt=""> 
                         <div class="user-name-hide media-body">
                         <span>Emay Walter</span>
                         <p class="mb-0 font-roboto">Admin<i class="middle ri-arrow-down-s-line"></i></p>

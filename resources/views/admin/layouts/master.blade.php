@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="es" dir="ltr">
 
 <head>
-    
+    <title>@yield('title', 'Ecommerce')</title>
     @include('admin.partials2.head')
 
 <body>
@@ -14,6 +14,8 @@
 
     <!-- page-wrapper Start-->
     <div class="page-wrapper compact-wrapper" id="pageWrapper">
+
+            @include('admin.partials2.loader')
 
             <!-- Page Header Start-->
              @include('admin.partials2.header')
@@ -59,6 +61,7 @@
 
     <!-- latest js -->
     @include('admin.partials2.scripts')
+  
 </body>
 
 </html>

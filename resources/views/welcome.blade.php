@@ -40,7 +40,8 @@
                                 </div>
 
                                 <a href="{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}">
-                                    <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" alt="{{ $product->name }}">
+                                    <img src="{{ asset('storage/' . $product->main_image) }}" class="img-fluid" alt="{{ $product->name }}">
+                                    
                                 </a>
 
                                 <ul class="option">
