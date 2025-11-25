@@ -1,4 +1,5 @@
 <?php
+// app/Models/ProductImage.php
 
 namespace App\Models;
 
@@ -10,46 +11,37 @@ class ProductImage extends Model
     use HasFactory;
 
     protected $fillable = [
-        
         'product_id',
-        'image_path',
-        'sort_order',
-        'is_featured'
+        'path',
+        'is_primary',
+        'order'
     ];
 
     protected $casts = [
-        'is_featured' => 'boolean'
+        'is_primary' => 'boolean'
     ];
 
-    /**
-     * Relación con el producto
-     */
+    // Relación con producto
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * Accesor para la URL de la imagen
-     */
-    public function getImageUrlAttribute()
+    // Accessor para URL completa
+    public function getUrlAttribute()
     {
-        return $this->image_path ? asset('storage/' . $this->image_path) : asset('assets/images/default-product.png');
+        return asset('storage/' . $this->path);
     }
 
-    /**
-     * Scope para imágenes destacadas
-     */
-    public function scopeFeatured($query)
+    // Scope para imágenes primarias
+    public function scopePrimary($query)
     {
-        return $query->where('is_featured', true);
+        return $query->where('is_primary', true);
     }
 
-    /**
-     * Scope para ordenar por sort_order
-     */
+    // Scope ordenado
     public function scopeOrdered($query)
     {
-        return $query->orderBy('sort_order')->orderBy('id');
+        return $query->orderBy('order');
     }
 }

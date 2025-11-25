@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Zone;
 use App\Models\City;
+use Illuminate\Support\Facades\DB;
 
 class ZoneSeeder extends Seeder
 {
@@ -14,28 +15,51 @@ class ZoneSeeder extends Seeder
      */
     public function run(): void
     {
-        $cities = City::all();
-
+        // Obtener el ID de Mérida
+        $meridaId = DB::table('cities')->where('name', 'Merida')->value('id');
+        
         $zones = [
-            // Lima
-            ['name' => 'Centro', 'price' => 2.00, 'city_id' => $cities->where('name', 'Merida')->first()->id],
-            ['name' => 'Santa Juana', 'price' => 5.50, 'city_id' => $cities->where('name', 'Merida')->first()->id],
-            ['name' => 'Las Americas', 'price' => 6.00, 'city_id' => $cities->where('name', 'Merida')->first()->id],
-            ['name' => 'Los Proceres', 'price' => 9.00, 'city_id' => $cities->where('name', 'Merida')->first()->id],
+            // ZONA CENTRO - MÉRIDA
+            ['name' => 'Centro', 'price' => 2.50, 'city_id' => $meridaId],
+            ['name' => 'La Parroquia', 'price' => 3.00, 'city_id' => $meridaId],
+            ['name' => 'La Hechicera', 'price' => 3.50, 'city_id' => $meridaId],
+            ['name' => 'Los Curos', 'price' => 3.00, 'city_id' => $meridaId],
+            ['name' => 'Santa María', 'price' => 2.80, 'city_id' => $meridaId],
+            ['name' => 'Santa Juana', 'price' => 3.20, 'city_id' => $meridaId],
             
-            // Ejido
-            ['name' => 'Centro Ejido', 'price' => 10.00, 'city_id' => $cities->where('name', 'Ejido')->first()->id],
-            ['name' => 'El Manzano', 'price' => 11.50, 'city_id' => $cities->where('name', 'Ejido')->first()->id],
-            ['name' => 'Sulbaran', 'price' => 10.00, 'city_id' => $cities->where('name', 'Ejido')->first()->id],
+            // ZONA NORTE - MÉRIDA
+            ['name' => 'Campo de Oro', 'price' => 4.00, 'city_id' => $meridaId],
+            ['name' => 'La Pedregosa', 'price' => 3.80, 'city_id' => $meridaId],
+            ['name' => 'La Victoria', 'price' => 3.50, 'city_id' => $meridaId],
+            ['name' => 'Los Chorros', 'price' => 4.20, 'city_id' => $meridaId],
+            ['name' => 'Mucumbarila', 'price' => 4.50, 'city_id' => $meridaId],
             
-            // El vigia
-            ['name' => 'Centro Vigia', 'price' => 15.50, 'city_id' => $cities->where('name', 'El Vigia')->first()->id],
-            ['name' => 'Zona Industrial', 'price' => 20.50, 'city_id' => $cities->where('name', 'El Vigia')->first()->id],
+            // ZONA SUR - MÉRIDA
+            ['name' => 'Ejido', 'price' => 5.00, 'city_id' => $meridaId],
+            ['name' => 'Lagunillas', 'price' => 6.00, 'city_id' => $meridaId],
+            ['name' => 'San Rafael de Muucuchíes', 'price' => 8.00, 'city_id' => $meridaId],
+            
+            // ZONA ESTE - MÉRIDA
+            ['name' => 'Avenida Urdaneta', 'price' => 3.00, 'city_id' => $meridaId],
+            ['name' => 'Bella Vista', 'price' => 3.20, 'city_id' => $meridaId],
+            ['name' => 'Los Sauzales', 'price' => 3.80, 'city_id' => $meridaId],
+            ['name' => 'Milla', 'price' => 2.80, 'city_id' => $meridaId],
+            
+            // ZONA OESTE - MÉRIDA
+            ['name' => 'Chama', 'price' => 4.50, 'city_id' => $meridaId],
+            ['name' => 'La Otra Banda', 'price' => 4.00, 'city_id' => $meridaId],
+            ['name' => 'Loma de Los Guantes', 'price' => 3.50, 'city_id' => $meridaId],
+            
+            // URBANIZACIONES - MÉRIDA
+            ['name' => 'Urbanización La Hacienda', 'price' => 4.20, 'city_id' => $meridaId],
+            ['name' => 'Urbanización Los Andes', 'price' => 3.80, 'city_id' => $meridaId],
+            ['name' => 'Urbanización Santa Rosa', 'price' => 3.60, 'city_id' => $meridaId],
+            ['name' => 'Urbanización El Valle', 'price' => 4.50, 'city_id' => $meridaId],
+            ['name' => 'Urbanización La Floresta', 'price' => 3.40, 'city_id' => $meridaId],
         ];
 
-        foreach ($zones as $zone) {
-            Zone::create($zone);
-        }
+        DB::table('zones')->insert($zones);
+    }
     
     }
-}
+

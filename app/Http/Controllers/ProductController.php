@@ -13,8 +13,8 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-    public function index(Request $request){
-
+    public function index(Request $request)
+    {
         Log::info('ProductController@index - Iniciando', ['search' => $request->search]);
         
         try {
@@ -26,12 +26,12 @@ class ProductController extends Controller
                 $query->where(function($q) use ($search) {
                     $q->where('name', 'LIKE', "%{$search}%")
                       ->orWhere('description', 'LIKE', "%{$search}%")
-                      ->orWhere('codebar', 'LIKE', "%{$search}%") // ← Nuevo campo agregado
-                      ->orWhere('price', 'LIKE', "%{$search}%")   // ← Nuevo campo agregado
+                      ->orWhere('codebar', 'LIKE', "%{$search}%")
+                      ->orWhere('price', 'LIKE', "%{$search}%")
                       ->orWhereHas('category', function($q) use ($search) {
                           $q->where('name', 'LIKE', "%{$search}%");
                       })
-                      ->orWhereHas('brand', function($q) use ($search) { // Opcional: también buscar por marca
+                      ->orWhereHas('brand', function($q) use ($search) {
                           $q->where('name', 'LIKE', "%{$search}%");
                       });
                 });
@@ -39,7 +39,6 @@ class ProductController extends Controller
     
             $products = $query->latest()->paginate(10);
             
-            // SOLUCIÓN TEMPORAL: Log simple sin métodos problemáticos
             Log::info('ProductController@index - Productos obtenidos', [
                 'search_term' => $request->search,
                 'page' => $request->page ?? 1
@@ -57,8 +56,8 @@ class ProductController extends Controller
         }
     }
 
-    public function create(){
-
+    public function create()
+    {
         Log::info('ProductController@create - Iniciando');
         
         try {
@@ -72,7 +71,7 @@ class ProductController extends Controller
                 'units' => $valueunits
             ]);
             
-            return view('admin/products.create', compact('categories', 'brands', 'valueunits'));
+            return view('admin.products.create', compact('categories', 'brands', 'valueunits'));
             
         } catch (\Exception $e) {
             Log::error('ProductController@create - Error', [
@@ -84,15 +83,14 @@ class ProductController extends Controller
         }
     }
 
-    public function store(Request $request){
-
+    public function store(Request $request)
+    {
         Log::info('ProductController@store - Iniciando creación de producto', [
-            'request_data' => $request->except(['main_image', 'cover_image', 'images'])
+            'request_data' => $request->except(['main_image', 'additional_images'])
         ]);
 
         try {
             $request->validate([
-                
                 'category_id' => 'required|exists:categories,id',
                 'brand_id' => 'required|exists:brands,id',
                 'codebar' => 'nullable|string|max:55|unique:products,codebar',
@@ -101,18 +99,16 @@ class ProductController extends Controller
                 'cost' => 'required|numeric|min:0',
                 'utility_percentage' => 'required|numeric|min:0|max:100',
                 'stock' => 'required|integer|min:0', 
-                'main_image' => 'required|image|mimes:jpeg,png,jpg,gif',
-                'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+                'main_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:6048',
+                'additional_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:6048', // Cambiado de 'images' a 'additional_images'
                 'unit' => 'required',
-                'video_provider' => 'required|in:youtube,vimeo,tiktok,custom,none',
-                'video_link' => 'nullable|url|required_if:video_provider,youtube,vimeo,custom',
+                'video_provider' => 'nullable|in:youtube,vimeo,tiktok,custom,none',
+                'video_link' => 'nullable|url',
             ]);
 
             Log::debug('ProductController@store - Validación pasada');
 
             $data = $request->only([
-
                 'category_id', 'brand_id', 'name', 'description', 
                 'cost', 'utility_percentage', 'stock', 'unit',
                 'video_provider', 'video_link', 'slug', 'codebar',
@@ -126,7 +122,7 @@ class ProductController extends Controller
             Log::debug('ProductController@store - Datos procesados', $data);
 
             // Calcular precio y ganancia
-             $data['profit'] = ($request->cost * $request->utility_percentage) / 100;
+            $data['profit'] = ($request->cost * $request->utility_percentage) / 100;
             $data['price'] = $request->cost + $data['profit'];
             $data['price2'] = $request->price2 ?? $data['price'];
 
@@ -135,50 +131,42 @@ class ProductController extends Controller
                 'utility_percentage' => $request->utility_percentage,
                 'profit' => $data['profit'],
                 'price' => $data['price']
-            ]); 
+            ]);
 
-            // Procesar imagen principal
+            // Guardar imagen principal en products.main_image
             if ($request->hasFile('main_image')) {
-                Log::debug('ProductController@store - Procesando imagen principal');
-                $mainImage = $request->file('main_image');
-                $mainImageName = 'product_main_' . time() . '.' . $mainImage->getClientOriginalExtension();
-                $mainImagePath = $mainImage->storeAs('products', $mainImageName, 'public');
-                $data['main_image'] = $mainImagePath;
-                Log::debug('ProductController@store - Imagen principal guardada', ['path' => $mainImagePath]);
+                $data['main_image'] = $request->file('main_image')->store('products', 'public');
+                Log::debug('ProductController@store - Imagen principal guardada', [
+                    'path' => $data['main_image']
+                ]);
             }
-
-            // Procesar imagen de portada
-             if ($request->hasFile('cover_image')) {
-                Log::debug('ProductController@store - Procesando imagen de portada');
-                $coverImage = $request->file('cover_image');
-                $coverImageName = 'product_cover_' . time() . '.' . $coverImage->getClientOriginalExtension();
-                $coverImagePath = $coverImage->storeAs('products', $coverImageName, 'public');
-                $data['cover_image'] = $coverImagePath;
-                Log::debug('ProductController@store - Imagen de portada guardada', ['path' => $coverImagePath]);
-            } 
 
             // Crear producto
             Log::debug('ProductController@store - Creando producto en BD');
             $product = Product::create($data);
             Log::info('ProductController@store - Producto creado', ['product_id' => $product->id]);
 
-            // Procesar imágenes adicionales
-            if ($request->hasFile('images')) {
-                $imageCount = count($request->file('images'));
-                Log::debug('ProductController@store - Procesando imágenes adicionales', ['count' => $imageCount]);
-                
-                foreach ($request->file('images') as $key => $image) {
-                    $imageName = 'product_' . $product->id . '_' . time() . '_' . $key . '.' . $image->getClientOriginalExtension();
-                    $imagePath = $image->storeAs('products/gallery', $imageName, 'public');
-
+            // Guardar imágenes adicionales en product_images
+            if ($request->hasFile('additional_images')) {
+                foreach ($request->file('additional_images') as $index => $image) {
+                    $imagePath = $image->store('products', 'public');
+                    
                     ProductImage::create([
                         'product_id' => $product->id,
-                        'image_path' => $imagePath,
-                        'sort_order' => $key,
-                        'is_featured' => $key === 0
+                        'path' => $imagePath,
+                        'is_primary' => false,
+                        'order' => $index
                     ]);
-                    Log::debug('ProductController@store - Imagen adicional guardada', ['path' => $imagePath]);
+                    
+                    Log::debug('ProductController@store - Imagen adicional guardada', [
+                        'index' => $index,
+                        'path' => $imagePath
+                    ]);
                 }
+                
+                Log::info('ProductController@store - Imágenes adicionales procesadas', [
+                    'count' => count($request->file('additional_images'))
+                ]);
             }
 
             Log::info('ProductController@store - Producto creado exitosamente', ['product_id' => $product->id]);
@@ -197,8 +185,8 @@ class ProductController extends Controller
         }
     }
 
-    public function show(Product $product){
-
+    public function show(Product $product)
+    {
         Log::info('ProductController@show - Mostrando producto', ['product_id' => $product->id]);
         
         try {
@@ -224,8 +212,8 @@ class ProductController extends Controller
         }
     }
 
-    public function edit(Product $product){
-
+    public function edit(Product $product)
+    {
         Log::info('ProductController@edit - Editando producto', ['product_id' => $product->id]);
         
         try {
@@ -254,11 +242,11 @@ class ProductController extends Controller
         }
     }
 
-    public function update(Request $request, Product $product){
-
+    public function update(Request $request, Product $product)
+    {
         Log::info('ProductController@update - Actualizando producto', [
             'product_id' => $product->id,
-            'request_data' => $request->except(['main_image', 'cover_image', 'images'])
+            'request_data' => $request->except(['main_image', 'additional_images'])
         ]);
 
         try {
@@ -270,12 +258,11 @@ class ProductController extends Controller
                 'cost' => 'required|numeric|min:0',
                 'utility_percentage' => 'required|numeric|min:0|max:100',
                 'stock' => 'required|integer|min:0',
-                'main_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'main_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:6048',
+                'additional_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:6048', // Cambiado de 'images' a 'additional_images'
                 'unit' => 'required',
-                'video_provider' => 'required|in:youtube,vimeo,custom,none',
-                'video_link' => 'nullable|url|required_if:video_provider,youtube,vimeo,custom',
+                'video_provider' => 'nullable|in:youtube,vimeo,custom,none',
+                'video_link' => 'nullable|url',
             ]);
 
             Log::debug('ProductController@update - Validación pasada');
@@ -283,11 +270,12 @@ class ProductController extends Controller
             $data = $request->only([
                 'category_id', 'brand_id', 'name', 'description', 
                 'cost', 'utility_percentage', 'stock', 'unit',
-                'video_provider', 'video_link'
+                'video_provider', 'video_link', 'slug', 'codebar',
+                'price2', 'utility_percentage2', 'profit2'
             ]);
 
-            $data['interchangeable'] = $request->has('interchangeable');
-            $data['refundable'] = $request->has('refundable');
+            $data['interchangeable'] = $request->has('interchangeable') ? 1 : 0;
+            $data['refundable'] = $request->has('refundable') ? 1 : 0;
             $data['status'] = $request->has('status');
 
             // Recalcular precio y ganancia
@@ -306,34 +294,8 @@ class ProductController extends Controller
                     Log::debug('ProductController@update - Imagen principal anterior eliminada');
                 }
 
-                $mainImage = $request->file('main_image');
-                $mainImageName = 'product_main_' . time() . '.' . $mainImage->getClientOriginalExtension();
-                $mainImagePath = $mainImage->storeAs('products', $mainImageName, 'public');
-                $data['main_image'] = $mainImagePath;
-                Log::debug('ProductController@update - Nueva imagen principal guardada', ['path' => $mainImagePath]);
-            }
-
-            // Procesar nueva imagen de portada
-            if ($request->hasFile('cover_image')) {
-                Log::debug('ProductController@update - Procesando nueva imagen de portada');
-                // Eliminar imagen anterior
-                if ($product->cover_image) {
-                    Storage::disk('public')->delete($product->cover_image);
-                    Log::debug('ProductController@update - Imagen de portada anterior eliminada');
-                }
-
-                $coverImage = $request->file('cover_image');
-                $coverImageName = 'product_cover_' . time() . '.' . $coverImage->getClientOriginalExtension();
-                $coverImagePath = $coverImage->storeAs('products', $coverImageName, 'public');
-                $data['cover_image'] = $coverImagePath;
-                Log::debug('ProductController@update - Nueva imagen de portada guardada', ['path' => $coverImagePath]);
-            }
-
-            // Eliminar imagen de portada si se solicita
-            if ($request->has('remove_cover_image') && $product->cover_image) {
-                Log::debug('ProductController@update - Eliminando imagen de portada por solicitud');
-                Storage::disk('public')->delete($product->cover_image);
-                $data['cover_image'] = null;
+                $data['main_image'] = $request->file('main_image')->store('products', 'public');
+                Log::debug('ProductController@update - Nueva imagen principal guardada', ['path' => $data['main_image']]);
             }
 
             // Actualizar producto
@@ -342,23 +304,26 @@ class ProductController extends Controller
             Log::info('ProductController@update - Producto actualizado', ['product_id' => $product->id]);
 
             // Procesar nuevas imágenes adicionales
-            if ($request->hasFile('images')) {
-                $lastSortOrder = $product->images()->max('sort_order') ?? 0;
-                $imageCount = count($request->file('images'));
+            if ($request->hasFile('additional_images')) {
+                $currentMaxOrder = $product->images()->max('order') ?? 0;
+                $imageCount = count($request->file('additional_images'));
                 Log::debug('ProductController@update - Procesando nuevas imágenes adicionales', ['count' => $imageCount]);
                 
-                foreach ($request->file('images') as $key => $image) {
-                    $imageName = 'product_' . $product->id . '_' . time() . '_' . $key . '.' . $image->getClientOriginalExtension();
-                    $imagePath = $image->storeAs('products/gallery', $imageName, 'public');
+                foreach ($request->file('additional_images') as $index => $image) {
+                    $imagePath = $image->store('products', 'public');
 
                     ProductImage::create([
                         'product_id' => $product->id,
-                        'image_path' => $imagePath,
-                        'sort_order' => $lastSortOrder + $key + 1,
-                        'is_featured' => false
+                        'path' => $imagePath,
+                        'is_primary' => false,
+                        'order' => $currentMaxOrder + $index + 1
                     ]);
                     Log::debug('ProductController@update - Nueva imagen adicional guardada', ['path' => $imagePath]);
                 }
+                
+                Log::info('ProductController@update - Imágenes adicionales agregadas', [
+                    'count' => $imageCount
+                ]);
             }
 
             Log::info('ProductController@update - Producto actualizado exitosamente', ['product_id' => $product->id]);
@@ -378,25 +343,21 @@ class ProductController extends Controller
         }
     }
 
-    public function destroy(Product $product){
-
+    public function destroy(Product $product)
+    {
         Log::info('ProductController@destroy - Eliminando producto', ['product_id' => $product->id]);
         
         try {
-            // Eliminar imágenes principales
+            // Eliminar imagen principal
             if ($product->main_image) {
                 Storage::disk('public')->delete($product->main_image);
                 Log::debug('ProductController@destroy - Imagen principal eliminada');
-            }
-            if ($product->cover_image) {
-                Storage::disk('public')->delete($product->cover_image);
-                Log::debug('ProductController@destroy - Imagen de portada eliminada');
             }
 
             // Eliminar imágenes adicionales
             $additionalImagesCount = $product->images->count();
             foreach ($product->images as $image) {
-                Storage::disk('public')->delete($image->image_path);
+                Storage::disk('public')->delete($image->path);
                 $image->delete();
             }
             Log::debug('ProductController@destroy - Imágenes adicionales eliminadas', ['count' => $additionalImagesCount]);
@@ -418,92 +379,8 @@ class ProductController extends Controller
         }
     }
 
-    /* public function details($id, $slug){
-
-        Log::info('ProductController@details - Mostrando detalles', ['id' => $id, 'slug' => $slug]);
-        
-        try {
-            // Buscar el producto
-            $product = Product::where('id', $id)->where('slug', $slug)->firstOrFail();
-            Log::debug('ProductController@details - Producto encontrado', ['name' => $product->name]);
-
-            // Obtener los 6 productos más vendidos
-            $topSellingProducts = $this->getTopSellingProducts(6);
-            Log::debug('ProductController@details - Productos más vendidos obtenidos', ['count' => $topSellingProducts->count()]);
-
-            return view('products.details', compact('product', 'topSellingProducts'));
-            
-        } catch (\Exception $e) {
-            Log::error('ProductController@details - Error', [
-                'id' => $id,
-                'slug' => $slug,
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]);
-            throw $e;
-        }
-    }
-
-    public function getTopSellingProducts($limit = 6){
-
-        Log::debug('ProductController@getTopSellingProducts - Obteniendo productos más vendidos', ['limit' => $limit]);
-        
-        try {
-            $products = Product::withCount('orderItems')
-                ->orderByDesc('order_items_count')
-                ->take($limit)
-                ->get();
-                
-            Log::debug('ProductController@getTopSellingProducts - Productos obtenidos', ['count' => $products->count()]);
-            
-            return $products;
-            
-        } catch (\Exception $e) {
-            Log::error('ProductController@getTopSellingProducts - Error', [
-                'limit' => $limit,
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]);
-            throw $e;
-        }
-    }
-
-    public function shop(Request $request){
-        
-        Log::info('ProductController@shop - Mostrando tienda', [
-            'search' => $request->search,
-            'categories' => $request->categories
-        ]);
-
-        try {
-            // ... tu código existente de filtros ...
-
-            $products = Product::with('category')
-                // ... tus filtros ...
-                ->paginate(12);
-
-            // SOLUCIÓN TEMPORAL
-            Log::info('ProductController@shop - Productos obtenidos', [
-                'search' => $request->search,
-                'categories_filter' => $request->categories,
-                'page' => $request->page ?? 1
-            ]);
-
-            // ... resto del código ...
-
-        } catch (\Exception $e) {
-            Log::error('ProductController@shop - Error', [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]);
-            throw $e;
-        }
-    } */
-
-    public function details($id, $slug){
+    public function details($id, $slug)
+    {
         // Buscar el producto
         $product = Product::where('id', $id)->where('slug', $slug)->firstOrFail();
 
@@ -513,14 +390,16 @@ class ProductController extends Controller
         return view('products.details', compact('product', 'topSellingProducts'));
     }
 
-    public function getTopSellingProducts($limit = 6){
-        return Product::withCount('orderItems') // Contar la cantidad de veces que un producto fue vendido
-            ->orderByDesc('order_items_count') // Ordenar por los más vendidos
-            ->take($limit) // Tomar solo los productos que se necesiten
+    public function getTopSellingProducts($limit = 6)
+    {
+        return Product::withCount('orderItems')
+            ->orderByDesc('order_items_count')
+            ->take($limit)
             ->get();
     }
 
-    public function shop(Request $request){
+    public function shop(Request $request)
+    {
         // Convertir las categorías en un array si están en formato "1,2,3"
         $categoriesFilter = $request->has('categories')
             ? explode(',', $request->input('categories'))
@@ -538,7 +417,7 @@ class ProductController extends Controller
             ? explode(',', $request->input('ratings'))
             : [];
 
-        $search = $request->input('search'); // Obtener texto de búsqueda
+        $search = $request->input('search');
 
         // Consultar productos con filtro de categorías múltiple
         $products = Product::with('category')
@@ -567,7 +446,7 @@ class ProductController extends Controller
             ->when(!empty($search), function ($query) use ($search) {
                 return $query->where('name', 'LIKE', "%{$search}%");
             })
-            ->paginate(12); // Se mantiene la paginación
+            ->paginate(12);
 
         // Obtener todas las categorías para los filtros
         $categories = Category::all();
@@ -575,5 +454,4 @@ class ProductController extends Controller
 
         return view('shop.index', compact('products','brands', 'categories', 'categoriesFilter', 'brandsFilter','pricesFilter','ratingsFilter', 'search'));
     }
-
 }

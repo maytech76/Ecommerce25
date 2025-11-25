@@ -11,13 +11,14 @@ class City extends Model
 
     protected $fillable = [
         'name',
+        'status'
     ];
 
     /**
      * Relación: Una ciudad tiene muchas zonas
      */
-    public function zones()
-    {
+    public function zones(){
+
         return $this->hasMany(Zone::class);
     }
 

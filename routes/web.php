@@ -10,6 +10,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\ShippingAddressController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
@@ -23,6 +24,7 @@ Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.in
 Route::resource('/products', ProductController::class); // publico
 Route::get('/product/{id}/{slug}', [ProductController::class, 'details'])->name('product.details'); // Cambiado de /{id}/{slug}
 
+
 Route::middleware('auth')->group(function () {
     // Rutas de ADMIN
     Route::prefix('admin')->group(function () {
@@ -31,7 +33,16 @@ Route::middleware('auth')->group(function () {
         })->name('admin.dashboard');
         
         Route::resource('/products', ProductController::class); // Ahora es /admin/products
+        
+        /* cambiar imagen principal (opcional) */
+       
         Route::resource('/categories', CategoryController::class);
+        Route::resource('/cities', CityController::class);
+
+        Route::get('/cities/{id}/details', [CityController::class, 'getCityDetails'])->name('cities.details');
+      
+
+      
     });
 
     // Perfil de usuario
@@ -64,6 +75,9 @@ Route::middleware('auth')->group(function () {
 
     // Reviews
     Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
 });
 
-require __DIR__.'/auth.php';
+
+
+/* require __DIR__.'/auth.php'; */

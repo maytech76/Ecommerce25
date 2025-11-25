@@ -141,19 +141,21 @@
                                                         <h5>Imagenes del Producto</h5>
                                                     </div>
 
-                                                    <div class="mb-4 row align-items-center">
-                                                        <label class="col-sm-3 col-form-label">Imagenes</label>
+                                                    <div class="row align-items-center mb-2">
+                                                        <label class="col-sm-3 col-form-label">Imagen Portada</label>
                                                         <div class="col-sm-9">
-                                                            <input class="form-control form-choose" type="file" id="main_image" name="main_image" multiple="">
+                                                            <input class="form-control form-choose" type="file" id="main_image" name="main_image">
+                                                        </div>
+                                                    </div> 
+
+                                                    <div class="mb-4 row align-items-center">
+                                                        <label class="col-sm-3 col-form-label">+ Imagenes</label>
+                                                        <div class="col-sm-9">
+                                                            <input class="form-control form-choose" type="file" id="additional_images" name="additional_images[]" multiple="">
                                                         </div>
                                                     </div>
 
-                                                    <div class="row align-items-center">
-                                                        <label class="col-sm-3 col-form-label">Imagen Portada</label>
-                                                        <div class="col-sm-9">
-                                                            <input class="form-control form-choose" type="file" id="cover_image" name="cover_image">
-                                                        </div>
-                                                    </div> 
+                                                    
 
                                                     {{-- Codigo de Barra --}}
                                                     <div class="mt-4 row align-items-center">
@@ -209,6 +211,7 @@
                                             </div>
                                         </div>
 
+                                       {{-- Costo-Utilidad-Precio --}}
                                         <div class="col-md-6">
                                             {{-- Costos - precios - %Utiludad - $Ganancia--}}
                                             <div class="card">
@@ -218,45 +221,47 @@
                                                     </div>
 
                                                     <div class="mb-4 row align-items-center">
-                                                        <label class="col-sm-3 ">Costo</label>
-                                                        <div class="col-sm-9">
-                                                            <input class="form-control border border-secondary" type="text" name="cost" placeholder="0" value="{{ old('cost') }}">
+                                                        <label class="col-sm-3 text-danger">Costo</label>
+                                                        <div class="col-sm-8">
+                                                            <input class="form-control border border-secondary" type="text" step="0.01" name="cost" id="cost" placeholder="0" value="{{ old('cost') }}">
                                                         </div>
                                                     </div>
                                                     
                                                     <div class="mb-4 row align-items-center">
                                                         <div class="row pb-3">
                                                             <label class="col-sm-3 mt-4">Precio 1</label>
-                                                            <div class="col-sm-4">
-                                                                <label for="">Estandar</label>
-                                                                <input class="form-control border border-secondary" type="text" name="price" id="price" placeholder="0" value="{{ old('price') }}">
-                                                            </div>
-
+                                                            
                                                             <div class="col-sm-2 mx-1">
                                                                 <label>Utilidad</label>
-                                                                <span><input class="form-control border border-secondary" type="text" id="utility_percentage" name="utility_percentage" value="{{ old('utility_percentage') }}"></span>
+                                                                <span><input class="form-control border border-secondary" type="text" step="0.01" id="utility_percentage" name="utility_percentage" value="{{ old('utility_percentage') }}"></span>
                                                             </div>
 
                                                             <div class="col-sm-2">
                                                                 <label>Ganancia</label>
-                                                                <span><input class="form-control border border-secondary" type="text" id="profit" name="profit" value="{{ old('profit') }}"></span>
+                                                                <span><input class="form-control border border-secondary" type="text" step="0.01" id="profit" name="profit" value="{{ old('profit') }}"></span>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <label class="fw-bold">Precio 1</label>
+                                                                <input class="form-control border border-secondary" type="text" step="0.01" name="price" id="price" placeholder="0" value="{{ old('price') }}">
                                                             </div>
                                                         </div>
 
                                                         <div class="row">
                                                             <label class="col-sm-3 mt-4">Precio 2</label>
-                                                            <div class="col-sm-4">
-                                                                <label for="">Descuento</label>
-                                                                <input class="form-control border border-secondary" type="text" name="price2" id="price2" placeholder="0" value="{{ old('price2') }}">
-                                                            </div>
+                                                            
                                                             <div class="col-sm-2 mx-1">
                                                                 <label style="padding-bottom: -10px">Utilidad</label>
-                                                                <span><input class="form-control border border-secondary" type="text" id="utility_percentage2" name="utility_percentage2" value="{{ old('utility_percentage2') }}"></span>
+                                                                <span><input class="form-control border border-secondary" type="text" step="0.01" id="utility_percentage2" name="utility_percentage2" value="{{ old('utility_percentage2') }}"></span>
                                                             </div>
 
                                                             <div class="col-sm-2">
                                                                 <label>Ganancia</label>
-                                                                <span><input class="form-control border border-secondary" type="text" id="profit2" name="profit2" value="{{ old('profit2') }}"></span>
+                                                                <span><input class="form-control border border-secondary" type="text" step="0.01" id="profit2" name="profit2" value="{{ old('profit2') }}"></span>
+                                                            </div>
+
+                                                            <div class="col-sm-4">
+                                                                <label class="fw-bold">Precio2</label>
+                                                                <input class="form-control border border-secondary" type="text" step="0.01" name="price2" id="price2" placeholder="0" value="{{ old('price2') }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -337,14 +342,213 @@
         .switch.sm-switch input:checked + .switch-state {
             background-color: #2ebe93; /* Color de Bootstrap para elementos activos */
         }
-
+        
         .switch.sm-switch input:focus + .switch-state {
             box-shadow: 0 0 1px #2ebe93;
         }
-
+        
         .switch.sm-switch input:checked + .switch-state:before {
             transform: translateX(20px); /* Ajustado al nuevo ancho */
         }
+        
     </style>
 </div>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Elementos del formulario
+        const costInput = document.getElementById('cost');
+        const utilityInput = document.getElementById('utility_percentage');
+        const profitInput = document.getElementById('profit');
+        const priceInput = document.getElementById('price');
+        const utilityInput2 = document.getElementById('utility_percentage2');
+        const profitInput2 = document.getElementById('profit2');
+        const priceInput2 = document.getElementById('price2');
+    
+        // FÓRMULA CORREGIDA: Markup sobre el costo
+        // Precio = Costo / (1 - (Utilidad/100))
+        
+        // Función para calcular basado en costo y utilidad (MARKUP)
+        function calculateFromCostAndUtility(cost, utility, profitElement, priceElement) {
+            if (utility >= 100) {
+                // Evitar división por cero o negativa
+                utility = 99.99;
+                utilityInput.value = utility.toFixed(2);
+            }
+            
+            const price = cost / (1 - (utility / 100));
+            const profit = price - cost;
+            
+            profitElement.value = profit.toFixed(2);
+            priceElement.value = price.toFixed(2);
+        }
+    
+        // Función para calcular basado en costo y precio
+        function calculateFromCostAndPrice(cost, price, profitElement, utilityElement) {
+            const profit = price - cost;
+            // Fórmula inversa: Utilidad = 1 - (Costo / Precio)
+            const utility = cost > 0 ? (1 - (cost / price)) * 100 : 0;
+            
+            profitElement.value = profit.toFixed(2);
+            utilityElement.value = utility.toFixed(2);
+        }
+    
+        // Función para calcular basado en costo y ganancia
+        function calculateFromCostAndProfit(cost, profit, utilityElement, priceElement) {
+            const price = cost + profit;
+            // Fórmula inversa: Utilidad = 1 - (Costo / Precio)
+            const utility = cost > 0 ? (1 - (cost / price)) * 100 : 0;
+            
+            utilityElement.value = utility.toFixed(2);
+            priceElement.value = price.toFixed(2);
+        }
+    
+        // Función principal para Precio 1
+        function handlePrice1Calculations() {
+            const cost = parseFloat(costInput.value) || 0;
+            const utility = parseFloat(utilityInput.value) || 0;
+            const profit = parseFloat(profitInput.value) || 0;
+            const price = parseFloat(priceInput.value) || 0;
+    
+            // Determinar qué campo fue modificado
+            const activeElement = document.activeElement;
+    
+            if (activeElement === utilityInput && cost > 0) {
+                // Caso 1: Usuario ingresa utilidad
+                calculateFromCostAndUtility(cost, utility, profitInput, priceInput);
+            } else if (activeElement === priceInput && cost > 0) {
+                // Caso 2: Usuario ingresa precio
+                calculateFromCostAndPrice(cost, price, profitInput, utilityInput);
+            } else if (activeElement === profitInput && cost > 0) {
+                // Caso 3: Usuario ingresa ganancia
+                calculateFromCostAndProfit(cost, profit, utilityInput, priceInput);
+            }
+        }
+    
+        // Función principal para Precio 2
+        function handlePrice2Calculations() {
+            const cost = parseFloat(costInput.value) || 0;
+            const utility2 = parseFloat(utilityInput2.value) || 0;
+            const profit2 = parseFloat(profitInput2.value) || 0;
+            const price2 = parseFloat(priceInput2.value) || 0;
+    
+            // Determinar qué campo fue modificado
+            const activeElement = document.activeElement;
+    
+            if (activeElement === utilityInput2 && cost > 0) {
+                // Caso 1: Usuario ingresa utilidad para precio 2
+                calculateFromCostAndUtility(cost, utility2, profitInput2, priceInput2);
+            } else if (activeElement === priceInput2 && cost > 0) {
+                // Caso 2: Usuario ingresa precio 2
+                calculateFromCostAndPrice(cost, price2, profitInput2, utilityInput2);
+            } else if (activeElement === profitInput2 && cost > 0) {
+                // Caso 3: Usuario ingresa ganancia para precio 2
+                calculateFromCostAndProfit(cost, profit2, utilityInput2, priceInput2);
+            }
+        }
+    
+        // Event listeners para Precio 1
+        utilityInput.addEventListener('input', handlePrice1Calculations);
+        profitInput.addEventListener('input', handlePrice1Calculations);
+        priceInput.addEventListener('input', handlePrice1Calculations);
+    
+        // Event listeners para Precio 2
+        utilityInput2.addEventListener('input', handlePrice2Calculations);
+        profitInput2.addEventListener('input', handlePrice2Calculations);
+        priceInput2.addEventListener('input', handlePrice2Calculations);
+    
+        // Event listener para costo (afecta ambos precios)
+        costInput.addEventListener('input', function() {
+            const cost = parseFloat(costInput.value) || 0;
+            
+            // Recalcular Precio 1 si hay datos
+            const utility1 = parseFloat(utilityInput.value) || 0;
+            const profit1 = parseFloat(profitInput.value) || 0;
+            const price1 = parseFloat(priceInput.value) || 0;
+    
+            if (utility1 > 0) {
+                calculateFromCostAndUtility(cost, utility1, profitInput, priceInput);
+            } else if (profit1 > 0) {
+                calculateFromCostAndProfit(cost, profit1, utilityInput, priceInput);
+            } else if (price1 > 0) {
+                calculateFromCostAndPrice(cost, price1, profitInput, utilityInput);
+            }
+    
+            // Recalcular Precio 2 si hay datos
+            const utility2 = parseFloat(utilityInput2.value) || 0;
+            const profit2 = parseFloat(profitInput2.value) || 0;
+            const price2 = parseFloat(priceInput2.value) || 0;
+    
+            if (utility2 > 0) {
+                calculateFromCostAndUtility(cost, utility2, profitInput2, priceInput2);
+            } else if (profit2 > 0) {
+                calculateFromCostAndProfit(cost, profit2, utilityInput2, priceInput2);
+            } else if (price2 > 0) {
+                calculateFromCostAndPrice(cost, price2, profitInput2, utilityInput2);
+            }
+        });
+    
+        // Función para sincronizar Precio 2 con Precio 1 si está vacío
+        function syncPrice2IfEmpty() {
+            const price1 = parseFloat(priceInput.value) || 0;
+            const price2 = parseFloat(priceInput2.value) || 0;
+            const utility2 = parseFloat(utilityInput2.value) || 0;
+            const profit2 = parseFloat(profitInput2.value) || 0;
+    
+            // Si Precio 2 está vacío pero Precio 1 tiene valor, copiar Precio 1
+            if (price1 > 0 && price2 === 0 && utility2 === 0 && profit2 === 0) {
+                priceInput2.value = price1.toFixed(2);
+                // Calcular utilidad y ganancia para Precio 2
+                const cost = parseFloat(costInput.value) || 0;
+                if (cost > 0) {
+                    calculateFromCostAndPrice(cost, price1, profitInput2, utilityInput2);
+                }
+            }
+        }
+    
+        // Sincronizar Precio 2 cuando se calcula Precio 1
+        utilityInput.addEventListener('blur', syncPrice2IfEmpty);
+        profitInput.addEventListener('blur', syncPrice2IfEmpty);
+        priceInput.addEventListener('blur', syncPrice2IfEmpty);
+    
+        // Validación para evitar valores negativos y utilidad >= 100%
+        function validateInputs(input) {
+            const value = parseFloat(input.value) || 0;
+            
+            if (value < 0) {
+                input.value = 0;
+            }
+            
+            // Validación especial para utilidad (no puede ser 100% o más en markup)
+            if ((input === utilityInput || input === utilityInput2) && value >= 100) {
+                input.value = 99.99;
+            }
+        }
+    
+        // Aplicar validación a todos los campos numéricos
+        const numberInputs = [costInput, utilityInput, profitInput, priceInput, utilityInput2, profitInput2, priceInput2];
+        numberInputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                validateInputs(this);
+                // Recalcular después de validar
+                if (this === utilityInput || this === utilityInput2) {
+                    handlePrice1Calculations();
+                    handlePrice2Calculations();
+                }
+            });
+        });
+    
+        // Ejemplo de demostración automática
+        function showExample() {
+            console.log("Ejemplo con Costo: 85 y Utilidad: 30%");
+            console.log("Fórmula: Precio = 85 / (1 - 0.30) = 85 / 0.70 = 121.428");
+        }
+        
+        // Mostrar ejemplo en consola (opcional)
+        showExample();
+    });
+</script>
+
+
+    

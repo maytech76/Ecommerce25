@@ -61,7 +61,7 @@
 
     <!-- latest js -->
     @include('admin.partials2.scripts')
-  
+    @stack('scripts')
 </body>
 
 </html>

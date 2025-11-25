@@ -13,9 +13,9 @@ return new class extends Migration
 
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->string('image_path');
-            $table->integer('sort_order')->default(0);
-            $table->boolean('is_featured')->default(false);
+            $table->string('path'); // Ruta de la imagen
+            $table->boolean('is_primary')->default(false); // Indica si es la imagen principal
+            $table->integer('order')->default(0); // Orden de visualización
             $table->timestamps();
         });
     }

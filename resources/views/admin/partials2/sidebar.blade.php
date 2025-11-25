@@ -95,7 +95,7 @@
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
                         <ul class="sidebar-submenu" style="display: none;">
                             <li>
-                                <a href="all-users.html" data-bs-original-title="" title="">Listado de Ciudades</a>
+                                <a href="{{route('cities.index')}} " data-bs-original-title="" title="">Listado de Ciudades</a>
                             </li>
                             <li>
                                 <a href="all-users.html" data-bs-original-title="" title="">Listado de Zonas</a>
