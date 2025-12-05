@@ -142,7 +142,7 @@
                                                     <li class="product-box-contain">
                                                         <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                                                             @csrf
-                                                            <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="text-danger">
+                                                            <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="text-danger">
                                                                 Cerrar Sesión
                                                             </a>
                                                         </form>

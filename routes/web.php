@@ -11,9 +11,11 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ShippingAddressController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -24,8 +26,21 @@ Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.in
 Route::resource('/products', ProductController::class); // publico
 Route::get('/product/{id}/{slug}', [ProductController::class, 'details'])->name('product.details'); // Cambiado de /{id}/{slug}
 
+// Rutas de autenticación
+Route::get('/login', [UserController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+Route::get('/register', [UserController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [UserController::class, 'register']);
 
-Route::middleware('auth')->group(function () {
+    // Rutas para reset de contraseña
+Route::get('/forgot-password', [UserController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [UserController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [UserController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('password.update');
+
+
+    Route::middleware('auth')->group(function () {
     // Rutas de ADMIN
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', function () {
@@ -40,10 +55,21 @@ Route::middleware('auth')->group(function () {
         Route::resource('/cities', CityController::class);
 
         Route::get('/cities/{id}/details', [CityController::class, 'getCityDetails'])->name('cities.details');
+
+
+        // Rutas para administradores
+        Route::resource('orders', OrderController::class)->except(['create', 'store']);
+        Route::patch('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
       
 
+        Route::resource('users', UserController::class);
       
     });
+
+   
+
+    // Ruta para logout
+    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
     // Perfil de usuario
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -75,6 +101,11 @@ Route::middleware('auth')->group(function () {
 
     // Reviews
     Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
+    // Rutas para administradores
+    Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.my-orders');
+
+   
 
 });
 

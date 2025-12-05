@@ -17,7 +17,16 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'email', 'password', 'phone', 'role', 'address'];
+    protected $fillable = [
+
+        'name', 
+        'email', 
+        'password', 
+        'phone', 
+        'role', 
+        'address'
+    
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -68,4 +77,5 @@ class User extends Authenticatable
             ->where('status', 'paid') // Solo se consideran órdenes pagadas
             ->exists();
     }
+    
 }

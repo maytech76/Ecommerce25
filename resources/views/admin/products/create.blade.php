@@ -229,37 +229,37 @@
                                                     
                                                     <div class="mb-4 row align-items-center">
                                                         <div class="row pb-3">
-                                                            <label class="col-sm-3 mt-4">Precio 1</label>
+                                                            <label class="col-sm-2 mt-4">Precio 1</label>
                                                             
-                                                            <div class="col-sm-2 mx-1">
+                                                            <div class="col-sm-3 mx-1">
                                                                 <label>Utilidad</label>
                                                                 <span><input class="form-control border border-secondary" type="text" step="0.01" id="utility_percentage" name="utility_percentage" value="{{ old('utility_percentage') }}"></span>
                                                             </div>
 
-                                                            <div class="col-sm-2">
+                                                            <div class="col-sm-3">
                                                                 <label>Ganancia</label>
                                                                 <span><input class="form-control border border-secondary" type="text" step="0.01" id="profit" name="profit" value="{{ old('profit') }}"></span>
                                                             </div>
-                                                            <div class="col-sm-4">
+                                                            <div class="col-sm-3">
                                                                 <label class="fw-bold">Precio 1</label>
                                                                 <input class="form-control border border-secondary" type="text" step="0.01" name="price" id="price" placeholder="0" value="{{ old('price') }}">
                                                             </div>
                                                         </div>
 
                                                         <div class="row">
-                                                            <label class="col-sm-3 mt-4">Precio 2</label>
+                                                            <label class="col-sm-2 mt-4">Precio 2</label>
                                                             
-                                                            <div class="col-sm-2 mx-1">
+                                                            <div class="col-sm-3 mx-1">
                                                                 <label style="padding-bottom: -10px">Utilidad</label>
                                                                 <span><input class="form-control border border-secondary" type="text" step="0.01" id="utility_percentage2" name="utility_percentage2" value="{{ old('utility_percentage2') }}"></span>
                                                             </div>
 
-                                                            <div class="col-sm-2">
+                                                            <div class="col-sm-3">
                                                                 <label>Ganancia</label>
                                                                 <span><input class="form-control border border-secondary" type="text" step="0.01" id="profit2" name="profit2" value="{{ old('profit2') }}"></span>
                                                             </div>
 
-                                                            <div class="col-sm-4">
+                                                            <div class="col-sm-3">
                                                                 <label class="fw-bold">Precio2</label>
                                                                 <input class="form-control border border-secondary" type="text" step="0.01" name="price2" id="price2" placeholder="0" value="{{ old('price2') }}">
                                                             </div>

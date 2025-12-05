@@ -87,33 +87,23 @@
                 </div>
                 <ul class="profile-dropdown onhover-show-div">
                     <li>
-                        <a href="all-users.html">
+                        <a href="{{route('users.index')}} ">
                             <i data-feather="users"></i>
-                            <span>Users</span>
+                            <span>Usuarios</span>
                         </a>
                     </li>
+                    
+                    
                     <li>
-                        <a href="order-list.html">
-                            <i data-feather="archive"></i>
-                            <span>Orders</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="support-ticket.html">
-                            <i data-feather="phone"></i>
-                            <span>Spports Tickets</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="profile-setting.html">
+                        <a href="{{route('dashboard')}} ">
                             <i data-feather="settings"></i>
-                            <span>Settings</span>
+                            <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="javascript:void(0)">
+                        <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="{{ route('logout') }}">
                             <i data-feather="log-out"></i>
-                            <span>Log out</span>
+                            <span>Cerrar</span>
                         </a>
                     </li>
                 </ul>

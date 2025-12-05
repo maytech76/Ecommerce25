@@ -114,10 +114,10 @@
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
                         <ul class="sidebar-submenu" style="display: none;">
                             <li>
-                                <a href="all-users.html" data-bs-original-title="" title="">Listado de usuarios</a>
+                                <a href="{{route('users.index')}}" data-bs-original-title="" title="">Listado de Usuarios</a>
                             </li>
                             <li>
-                                <a href="add-new-user.html" data-bs-original-title="" title="">Nuevo usuario</a>
+                                <a href="{{route('users.create')}} " data-bs-original-title="" title="">Nuevo Usuario</a>
                             </li>
                         </ul>
                     </li>
@@ -126,25 +126,28 @@
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
                             <i class="ri-user-3-line"></i>
-                            <span>Roles</span>
+                            <span>Roles y Permisos</span>
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
                         <ul class="sidebar-submenu" style="display: none;">
                             <li>
-                                <a href="role.html" data-bs-original-title="" title="">Todos los roles</a>
+                                <a href="#" data-bs-original-title="" title="">Usuarios</a>
                             </li>
                             <li>
-                                <a href="create-role.html" data-bs-original-title="" title="">Nuevo Rol</a>
+                                <a href="#" data-bs-original-title="" title="">Roles</a>
+                            </li>
+                            <li>
+                                <a href="#" data-bs-original-title="" title="">Permisos</a>
                             </li>
                         </ul>
                     </li>
 
                     {{-- Comunicacion --}}
-                    <li class="sidebar-list">
+                    {{-- <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="media.html" data-bs-original-title="" title="">
                             <i class="ri-price-tag-3-line"></i>
                             <span>Imagen</span>
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
-                    </li>
+                    </li> --}}
 
                     {{-- Ordenes de Compras --}}
                     <li class="sidebar-list">
@@ -154,19 +157,19 @@
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
                         <ul class="sidebar-submenu" style="display: none;">
                             <li>
-                                <a href="order-list.html" data-bs-original-title="" title="">Listado de Ordenes</a>
+                                <a href="{{route('orders.index')}} " data-bs-original-title="" title="">Listado de Ordenes</a>
                             </li>
                             <li>
-                                <a href="order-detail.html" data-bs-original-title="" title="">Detalles de Ordenes</a>
+                                <a href="#" data-bs-original-title="" title="">Detalles de Ordenes</a>
                             </li>
                             <li>
-                                <a href="order-tracking.html" data-bs-original-title="" title="">Seguimiento de Ordenes</a>
+                                <a href="#" data-bs-original-title="" title="">Seguimiento de Ordenes</a>
                             </li>
                         </ul>
                     </li>
 
                     {{-- Localizacion --}}
-                    <li class="sidebar-list">
+                    {{-- <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
                             <i class="ri-focus-3-line"></i>
                             <span>Localización</span>
@@ -180,10 +183,10 @@
                                 <a href="currency-rates.html" data-bs-original-title="" title="">Tipos de cambio</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
 
                     {{-- Cupones --}}
-                    <li class="sidebar-list">
+                    {{-- <li class="sidebar-list">
                         <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
                             <i class="ri-price-tag-3-line"></i>
                             <span>Cupones</span>
@@ -197,7 +200,7 @@
                                 <a href="create-coupon.html" data-bs-original-title="" title="">Nuevo Cupón</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
 
                     {{-- <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="taxes.html" data-bs-original-title="" title="">
@@ -206,20 +209,20 @@
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
                     </li> --}}
 
-                    <li class="sidebar-list">
+                    {{-- <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="product-review.html" data-bs-original-title="" title="">
                             <i class="ri-star-line"></i>
                             <span>Detalles de Productos</span>
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
-                    </li>
+                    </li> --}}
 
                     {{-- Ticket Soporte --}}
-                    <li class="sidebar-list">
+                   {{--  <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="support-ticket.html" data-bs-original-title="" title="">
                             <i class="ri-phone-line"></i>
                             <span>Ticket de Soporte</span>
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
-                    </li>
+                    </li> --}}
 
                     {{-- Configuracion --}}
                     <li class="sidebar-list">

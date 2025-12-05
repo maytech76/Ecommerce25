@@ -74,7 +74,7 @@
                             </div>
 
                             <!-- Recordar sesión y Recuperar contraseña -->
-                            <div class="col-12">
+                           {{--  <div class="col-12">
                                 <div class="forgot-box">
                                     <div class="form-check ps-0 m-0 remember-box">
                                         <input class="checkbox_animated check-box" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
@@ -82,7 +82,7 @@
                                     </div>
                                     <a href="{{ route('password.request') }}" class="forgot-password">¿Olvidaste tu contraseña?</a>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <!-- Botón de inicio de sesión -->
                             <div class="col-12">
