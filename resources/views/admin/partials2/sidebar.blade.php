@@ -141,13 +141,27 @@
                         </ul>
                     </li>
 
-                    {{-- Comunicacion --}}
-                    {{-- <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title link-nav" href="media.html" data-bs-original-title="" title="">
-                            <i class="ri-price-tag-3-line"></i>
-                            <span>Imagen</span>
+                   
+
+                    {{-- Cuentas x Cobrar --}}
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
+                            <i class="ri-archive-line"></i>
+                            <span>Cuentas x Cobrar</span>
                         <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
-                    </li> --}}
+                        <ul class="sidebar-submenu" style="display: none;">
+                            <li>
+                                <a href="{{route('receivables.index')}}" data-bs-original-title="" title="">Listado de Cuentas</a>
+                            </li>
+                            <li>
+                                <a href="#" data-bs-original-title="" title="">Detalles de CxC</a>
+                            </li>
+                            <li>
+                                <a href="#" data-bs-original-title="" title="">Seguimiento de CxC</a>
+                            </li>
+                        </ul>
+                    </li>
+
 
                     {{-- Ordenes de Compras --}}
                     <li class="sidebar-list">

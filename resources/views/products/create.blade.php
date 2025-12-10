@@ -20,6 +20,7 @@
                                     <h5>Registro de Productos</h5>
                                 </div>
 
+
                                 <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="theme-form theme-form-2 mega-form">
 
                                     <div class="row">
@@ -308,12 +309,10 @@
 
 
                                 </form>
+
+                                
                             </div>
-                        </div>
-
-                       
-
-                       
+                        </div>                    
                     </div>
                 </div>
             </div>

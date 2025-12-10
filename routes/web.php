@@ -16,6 +16,10 @@ use App\Http\Controllers\ShippingAddressController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 
+//Cuentas Por Cobrar
+use App\Http\Controllers\ReceivableController;
+use App\Http\Controllers\OldPaymentController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -59,6 +63,7 @@ Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('
 
         // Rutas para administradores
         Route::resource('orders', OrderController::class)->except(['create', 'store']);
+        Route::get('/orders/{order}/details', [OrderController::class, 'orderdetails'])->name('orders.orderdetails');
         Route::patch('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
       
 
@@ -104,6 +109,25 @@ Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('
 
     // Rutas para administradores
     Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.my-orders');
+
+    //Rutas para el modulo Cuentas x Cobrar 
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        // Rutas para Cuentas por Cobrar
+        Route::get('/receivables', [ReceivableController::class, 'index'])->name('receivables.index');
+        Route::get('/receivables/create', [ReceivableController::class, 'create'])->name('receivables.create');
+        Route::post('/receivables', [ReceivableController::class, 'store'])->name('receivables.store');
+        Route::get('/receivables/{receivable}', [ReceivableController::class, 'show'])->name('receivables.show');
+        Route::get('/receivables/{receivable}/edit', [ReceivableController::class, 'edit'])->name('receivables.edit');
+        Route::put('/receivables/{receivable}', [ReceivableController::class, 'update'])->name('receivables.update');
+        Route::delete('/receivables/{receivable}', [ReceivableController::class, 'destroy'])->name('receivables.destroy');
+        
+        // Rutas para Pagos
+        Route::get('/receivables/{receivable}/payment', [ReceivableController::class, 'createPayment'])->name('receivables.payment.create');
+        Route::post('/receivables/{receivable}/payments', [OldPaymentController::class, 'store'])->name('receivables.payments.store');
+        Route::get('/payments/{payment}/receipt', [OldPaymentController::class, 'showReceipt'])->name('payments.receipt');
+        Route::get('/payments/{payment}/receiptweb', [OldPaymentController::class, 'showReceipt'])->name('payments.receiptweb');
+        Route::delete('/payments/{payment}', [OldPaymentController::class, 'destroy'])->name('payments.destroy');
+    });
 
    
 

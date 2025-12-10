@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 
-@section('title', 'Ordenes')
+@section('title', 'Usuarios')
 
 @section('content')
 
@@ -38,7 +38,7 @@
                                                     <th>#</th>
                                                     <th style="text-align: left">Nombre</th>
                                                     <th style="text-align: left">Email</th>
-                                                    <th style="text-align: left">Telefono</th>
+                                                    {{-- <th style="text-align: left">Telefono</th> --}}
                                                     <th>Perfil</th>
                                                     <th>Opciones</th>
                                                 </tr>
@@ -54,9 +54,7 @@
 
                                                     <td style="text-align: left">{{ $user->email }}</td>
 
-
-
-                                                    <td style="text-align: left">{{ $user->phone }}</td>
+                                                    {{-- <td style="text-align: left">{{ $user->phone }}</td> --}}
 
                                                     <td>{{ $user->role }}</td>
 
