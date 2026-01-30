@@ -10,14 +10,15 @@ use Illuminate\Support\Str;
 class CategoryController extends Controller
 {
     
-    public function index()
-    {
+    public function index(){
+
         $categories = Category::latest()->paginate(4);
         return view('admin.categories.index', compact('categories'));
     }
 
     
     public function create(){
+        
         return view('admin.categories.create');
     }
 
@@ -106,8 +107,8 @@ class CategoryController extends Controller
     }
 
     
-    public function destroy(Category $category)
-    {
+    public function destroy(Category $category){
+        
         // Eliminar imagen si existe
         if ($category->photo && Storage::disk('public')->exists($category->photo)) {
             Storage::disk('public')->delete($category->photo);

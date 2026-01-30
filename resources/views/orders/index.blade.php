@@ -69,14 +69,18 @@
                                                         <a href="{{route('orders.orderdetails', $order->id)}} " 
                                                            class="btn btn-sm" 
                                                            data-order-id="{{ $order->id }}"
-                                                           title="Ver detalles">
+                                                           title="Ver detalles"
+                                                           data-bs-toggle="tooltip"
+                                                            target="_blank">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
-                                                        <a href="#" class="btn btn-sm" 
+
+                                                        <a href="{{route('dispatched.ordedispatched', $order->id)}}" class="btn btn-sm" 
                                                         data-order-id="{{ $order->id }}"
                                                         title="Despacho">                                                                                           
                                                             <i class="ri-file-fill text-warning"></i>
                                                         </a>
+
                                                         <a href="{{ route('orders.edit', $order->id) }}" 
                                                            class="btn btn-sm"
                                                            title="Editar">

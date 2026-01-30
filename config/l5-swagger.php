@@ -11,7 +11,7 @@ return [
                 'version' => '1.0.0',
                 'termsOfService' => '',
                 'contact' => [
-                    'email' => 'soport@maydev.tech',
+                    'email' => 'soporte@maydev.tech', // Corregido: soport → soporte
                 ],
                 'license' => [
                     'name' => 'MIT',
@@ -20,21 +20,25 @@ return [
             ],
 
             'routes' => [
-                'api' => 'api/documentation', // Ruta para acceder a la documentación
+                'api' => 'api/documentation',
+                'docs' => 'docs',
+                'oauth2_callback' => 'api/oauth2-callback',
             ],
 
             'paths' => [
                 'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+                'docs_json' => 'api-docs.json',
+                'docs_yaml' => 'api-docs.yaml',
+                'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
                 'annotations' => [
-                    base_path('app/Models'),
                     base_path('app/Http/Controllers'),
+                    base_path('app/Models'),
                 ],
             ],
 
-            // ===== CAMBIO PRINCIPAL: Agregar 'servers' para usar APP_URL =====
             'servers' => [
                 [
-                    'url' => env('APP_URL') . '/api', // **** Usa APP_URL del .env ****
+                    'url' => env('APP_URL') . '/api',
                     'description' => 'Servidor principal',
                 ],
             ],
@@ -44,14 +48,17 @@ return [
     'defaults' => [
         'routes' => [
             'docs' => 'docs',
+            'api' => 'api/documentation',
             'oauth2_callback' => 'api/oauth2-callback',
-            'middleware' => [
-                'api' => [],
-                'asset' => [],
-                'docs' => [],
-            ],
         ],
-
+        
+        'middleware' => [
+            'api' => [],
+            'asset' => [],
+            'docs' => [],
+            'oauth2_callback' => [],
+        ],
+        
         'paths' => [
             'docs' => storage_path('api-docs'),
             'views' => base_path('resources/views/vendor/l5-swagger'),
@@ -67,20 +74,41 @@ return [
         'operations_sort' => env('L5_SWAGGER_OPERATIONS_SORT', null),
         'additional_config_url' => env('L5_SWAGGER_ADDITIONAL_CONFIG_URL', null),
         'validator_url' => env('L5_SWAGGER_VALIDATOR_URL', null),
+        
+        // ELIMINA esta sección duplicada:
+        // 'securityDefinitions' => [
+        //     'securitySchemes' => [], // Comentado porque está duplicado
+        //     'security' => []
+        // ]
+    ],
 
-        'constants' => [
-            // ===== CAMBIO OPCIONAL: Eliminar L5_SWAGGER_CONST_HOST si ya usas APP_URL =====
-            'L5_SWAGGER_CONST_HOST' => env('APP_URL'), // Opcional: reemplazar por APP_URL
+    // === NUEVA SECCIÓN PARA CONFIGURACIÓN DE UI ===
+    'swagger_ui' => [
+        'display' => [
+            'doc_expansion' => 'none',
+            'filter' => true,
+            'operations_sorter' => 'method',
+            'tags_sorter' => 'alpha',
+            'default_models_expand_depth' => 3,
+            'default_model_expand_depth' => 3,
+            'show_extensions' => true,
+            'show_common_extensions' => true,
         ],
+        
+        'persist_authorization' => true, // IMPORTANTE: Guarda el token entre sesiones
+    ],
 
-        'securityDefinitions' => [
-            'securitySchemes' => [],
-            'security' => [],
+    // === NUEVA SECCIÓN PARA SECURITY SCHEMES ===
+    'security' => [
+        'sanctum' => [
+            'type' => 'http',
+            'description' => 'Autenticación con Sanctum',
+            'scheme' => 'bearer',
+            'bearerFormat' => 'sanctum',
         ],
-
-        'securityDefinitions' => [
-            'securitySchemes' => [], // Vacío porque este endpoint no requiere autenticación
-            'security' => []
-        ]
+    ],
+    
+    'constants' => [
+        'L5_SWAGGER_CONST_HOST' => env('APP_URL'),
     ],
 ];

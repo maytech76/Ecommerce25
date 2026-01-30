@@ -112,6 +112,7 @@ Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('
 
     //Rutas para el modulo Cuentas x Cobrar 
     Route::middleware(['auth', 'role:admin'])->group(function () {
+        
         // Rutas para Cuentas por Cobrar
         Route::get('/receivables', [ReceivableController::class, 'index'])->name('receivables.index');
         Route::get('/receivables/create', [ReceivableController::class, 'create'])->name('receivables.create');
@@ -128,6 +129,10 @@ Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('
         Route::get('/payments/{payment}/receiptweb', [OldPaymentController::class, 'showReceipt'])->name('payments.receiptweb');
         Route::delete('/payments/{payment}', [OldPaymentController::class, 'destroy'])->name('payments.destroy');
     });
+
+
+    //Vista para Formulario de despacho
+    Route::get('/dispatched/{order}', [OrderController::class, 'ordedispatched'])->name('dispatched.ordedispatched');
 
    
 

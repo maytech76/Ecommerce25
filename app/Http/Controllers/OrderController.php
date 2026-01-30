@@ -147,7 +147,7 @@ class OrderController extends Controller
      * Display detailed order information for web view
      */
     public function orderDetails(Order $order){
-        
+
         // Cargar relaciones disponibles
         $order->load([
             'user',
@@ -210,8 +210,7 @@ class OrderController extends Controller
     /**
      * Generate order timeline
      */
-    private function getOrderTimeline(Order $order)
-    {
+    private function getOrderTimeline(Order $order){
         $timeline = [];
         
         // Orden creada
@@ -258,5 +257,40 @@ class OrderController extends Controller
         });
         
         return $timeline;
+    }
+
+     /**
+     * Display order dispatch information
+     */
+    public function ordedispatched(Order $order){
+        
+        // Cargar todas las relaciones necesarias para el despacho
+        $order->load([
+            'user',
+            'userAddress.zone.city', // Para dirección completa
+            'orderItems.product', // Para productos
+            'orderItems.product.images', // Para imágenes de productos
+            'payment', // Información de pago
+            'shippingAddress' // Dirección de envío específica
+        ]);
+
+        // Calcular totales
+        $totals = [
+            'subtotal' => $order->orderItems->sum('subtotal'),
+            'shipping' => $order->shipping_cost ?? 0,
+            'tax' => $order->tax_amount ?? 0,
+            'discount' => $order->discount_amount ?? 0,
+            'total' => $order->total_price
+        ];
+
+        // Obtener información de despacho
+        $dispatchInfo = [
+            'dispatch_date' => now(),
+            'dispatch_number' => 'DESP-' . str_pad($order->id, 6, '0', STR_PAD_LEFT),
+            'prepared_by' => Auth::user()->name,
+            'status' => $order->status
+        ];
+
+        return view('dispatched.ordedispatched', compact('order', 'totals', 'dispatchInfo'));
     }
 }
