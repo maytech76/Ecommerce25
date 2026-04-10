@@ -1,6 +1,6 @@
 <section class="banner-section">
     <div class="container-fluid-lg">
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-12">
                 <div class="banner-contain-3 section-b-space section-t-space hover-effect">
                     <img src="{{ asset('assets/images/veg-3/banner/3.png') }}" class="img-fluid bg-img" alt="Alimentos 100% orgánicos de la mejor calidad">
@@ -16,6 +16,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </section>

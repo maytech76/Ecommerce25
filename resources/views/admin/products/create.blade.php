@@ -44,10 +44,10 @@
 
                                             {{-- Marca del producto --}}
                                             <div class="mb-4 row align-items-center">
-                                                <label class="col-sm-3 col-form-label ">Marca</label>
+                                                <label class="col-sm-3 col-form-label ">Tipo de producto</label>
                                                 <div class="col-sm-9">
                                                     <select class="js-example-basic-single w-100 form-select border border-secondary" name="brand_id" id="brand_id">
-                                                        <option value="">Selecciona un Marca</option>
+                                                        <option value="">Seleccionar Tipo</option>
                                                         @foreach ($brands as $brand)
                                                            <option value="{{$brand->id}}" {{ old('brand_id') == $brand->id ? 'selected' : '' }}>{{$brand->name}}</option>
                                                         @endforeach

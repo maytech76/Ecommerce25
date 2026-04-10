@@ -8,39 +8,39 @@
                     <div class="service-contain">
                         <!-- Producto siempre fresco -->
                         <div class="service-box">
-                            <div class="service-image">
+                            {{-- <div class="service-image">
                                 <img src="../assets/svg/product.svg" class="blur-up lazyload" alt="Productos frescos">
-                            </div>
+                            </div> --}}
 
-                            <div class="service-detail">
+                            {{-- <div class="service-detail">
                                 <h5>Productos Siempre Frescos</h5>
-                            </div>
+                            </div> --}}
                         </div>
 
                         <!-- Envío gratuito -->
                         <div class="service-box">
-                            <div class="service-image">
+                            {{-- <div class="service-image">
                                 <img src="../assets/svg/delivery.svg" class="blur-up lazyload" alt="Envío gratis">
-                            </div>
+                            </div> --}}
 
-                            <div class="service-detail">
+                            {{-- <div class="service-detail">
                                 <h5>Envío Gratis en Compras Mayores a $50</h5>
-                            </div>
+                            </div> --}}
                         </div>
 
                         <!-- Descuentos diarios -->
                         <div class="service-box">
-                            <div class="service-image">
+                            {{-- <div class="service-image">
                                 <img src="../assets/svg/discount.svg" class="blur-up lazyload" alt="Descuentos diarios">
-                            </div>
+                            </div> --}}
 
-                            <div class="service-detail">
+                            {{-- <div class="service-detail">
                                 <h5>Descuentos Especiales Todos los Días</h5>
-                            </div>
+                            </div> --}}
                         </div>
 
                         <!-- Mejor precio del mercado -->
-                        <div class="service-box">
+                       {{--  <div class="service-box">
                             <div class="service-image">
                                 <img src="../assets/svg/market.svg" class="blur-up lazyload" alt="Mejor precio">
                             </div>
@@ -48,7 +48,7 @@
                             <div class="service-detail">
                                 <h5>El Mejor Precio del Mercado</h5>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -61,8 +61,7 @@
                     <a href="{{ route('home') }}" class="foot-logo">
                         <img src="{{ asset('assets/images/logo/maydev.png') }}" class="img-fluid" alt="" style="width: 75px;">
                     </a>
-                    <p class="information-text">it is a long established fact that a reader will be distracted
-                        by the readable content.</p>
+                    <p class="information-text">Redes Sociales</p>
                     <ul class="social-icon">
                         <li>
                             <a href="www.facebook.com">
@@ -104,7 +103,7 @@
 
                 </div>
 
-                <div class="col-xxl-3 col-xl-4 col-sm-6">
+                {{-- <div class="col-xxl-3 col-xl-4 col-sm-6">
                     <div class="footer-title">
                         <h4>Store infomation</h4>
                     </div>
@@ -127,13 +126,13 @@
                             </a>
                         </li>
                     </ul>
-                </div>
+                </div> --}}
             </div>
         </div>
 
         <div class="sub-footer section-small-space">
             <div class="left-footer">
-                <p>2025 Copyright By Maydev</p>
+                <p>2025 Copyright</p>
             </div>
             <div class="right-footer">
                 <ul class="payment-box">

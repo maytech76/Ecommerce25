@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>@yield('title', 'Andercode Ecommerce')</title>
+    <title>@yield('title', 'Menu')</title>
     @include('partials.head')
 </head>
 
@@ -86,6 +86,7 @@
         window.syncCartWishlistUrl = "{{ route('sync.cart.wishlist') }}";
     </script>
     <script src="{{ asset('js/syncro.js') }}"></script>
+    @stack('scripts') <!-- Para scripts específicos por página -->
 </body>
 
 </html>

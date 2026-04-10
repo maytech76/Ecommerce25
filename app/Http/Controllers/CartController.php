@@ -56,8 +56,7 @@ class CartController extends Controller
         return view('cart.checkout', compact('cartItems', 'addresses'));
     }
 
-    public function syncCartWishlist(Request $request)
-    {
+    public function syncCartWishlist(Request $request){
         $userId = auth()->id();
 
         // Sincronizar carrito

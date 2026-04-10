@@ -13,8 +13,7 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         Log::info('ProductController@index - Iniciando', ['search' => $request->search]);
         
         try {
@@ -56,8 +55,7 @@ class ProductController extends Controller
         }
     }
 
-    public function create()
-    {
+    public function create(){
         Log::info('ProductController@create - Iniciando');
         
         try {
@@ -83,8 +81,8 @@ class ProductController extends Controller
         }
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request){
+
         Log::info('ProductController@store - Iniciando creación de producto', [
             'request_data' => $request->except(['main_image', 'additional_images'])
         ]);
@@ -185,8 +183,8 @@ class ProductController extends Controller
         }
     }
 
-    public function show(Product $product)
-    {
+    public function show(Product $product){
+
         Log::info('ProductController@show - Mostrando producto', ['product_id' => $product->id]);
         
         try {
@@ -212,8 +210,8 @@ class ProductController extends Controller
         }
     }
 
-    public function edit(Product $product)
-    {
+    public function edit(Product $product){
+
         Log::info('ProductController@edit - Editando producto', ['product_id' => $product->id]);
         
         try {
@@ -242,8 +240,8 @@ class ProductController extends Controller
         }
     }
 
-    public function update(Request $request, Product $product)
-    {
+    public function update(Request $request, Product $product){
+        
         Log::info('ProductController@update - Actualizando producto', [
             'product_id' => $product->id,
             'request_data' => $request->except(['main_image', 'additional_images'])
@@ -343,8 +341,7 @@ class ProductController extends Controller
         }
     }
 
-    public function destroy(Product $product)
-    {
+    public function destroy(Product $product){
         Log::info('ProductController@destroy - Eliminando producto', ['product_id' => $product->id]);
         
         try {
@@ -379,8 +376,7 @@ class ProductController extends Controller
         }
     }
 
-    public function details($id, $slug)
-    {
+    public function details($id, $slug){
         // Buscar el producto
         $product = Product::where('id', $id)->where('slug', $slug)->firstOrFail();
 

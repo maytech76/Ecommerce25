@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
 use App\Models\Brand;
 use Illuminate\Support\Str;
 
@@ -15,13 +13,26 @@ class BrandSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i < 10; $i++) {
-            $name = fake()->unique()->company(); // Genera un nombre de marca aleatorio
+        $brands = [
+            [
+                'name' => 'Comidas',
+                'description' => 'Las mejores marcas de comidas rápidas y tradicionales, con ingredientes frescos y sabores únicos.'
+            ],
+            [
+                'name' => 'Bebidas',
+                'description' => 'Bebidas refrescantes, naturales y energéticas para acompañar tus comidas.'
+            ],
+            [
+                'name' => 'Snacks',
+                'description' => 'Snacks crujientes, papas fritas, nachos, y aperitivos para cualquier momento del día.'
+            ]
+        ];
 
+        foreach ($brands as $brand) {
             Brand::create([
-                'name' => $name,
-                'slug' => Str::slug($name),
-                'description' => fake()->sentence(), // Descripción aleatoria
+                'name' => $brand['name'],
+                'slug' => Str::slug($brand['name']),
+                'description' => $brand['description']
             ]);
         }
     }

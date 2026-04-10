@@ -52,11 +52,11 @@
 
                                             {{-- Marca del producto --}}
                                             <div class="mb-4 row align-items-center">
-                                                <label class="col-sm-3 col-form-label ">Marca</label>
+                                                <label class="col-sm-3 col-form-label ">Tipo</label>
                                                 <div class="col-sm-9">
                                                     <select class="js-example-basic-single w-100 form-select border border-secondary">
                                                         
-                                                        <option value="">Selecciona un Marca</option>
+                                                        <option value="">Selecciona tipo de productos</option>
                                                          @foreach ($brands as $brand)
 
                                                            <option value="{{$brand->id}} ">{{$brand->name}}</option>

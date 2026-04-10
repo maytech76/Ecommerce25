@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="breadcrumb-contain">
-                    <h2>🛒 Checkout</h2>
+                    <h2>Pedido</h2>
                     <nav>
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
@@ -17,7 +17,7 @@
                                 </a>
                             </li>
 
-                            <li class="breadcrumb-item active">Checkout</li>
+                            <li class="breadcrumb-item active">Pedido</li>
                         </ol>
                     </nav>
                 </div>
@@ -29,7 +29,7 @@
 <section class="checkout-section-2 section-b-space">
     <div class="container-fluid-lg">
         <div class="row g-sm-4 g-3">
-            <div class="col-lg-8">
+            <div class="col-lg-4">
                 <div class="left-sidebar-checkout">
 
                     <form action="{{ route('stripe.checkout') }}" method="POST">
@@ -44,7 +44,7 @@
 
                                     <div class="checkout-box">
                                         <div class="checkout-title">
-                                            <h4>Dirección de Entrega</h4>
+                                            <h4>Selecione una Mesa</h4>
                                         </div>
 
                                         <div class="checkout-detail">
@@ -70,7 +70,7 @@
                                                     </div>
                                                 @empty
                                                     <div class="col-12">
-                                                        <p class="text-danger">No tienes direcciones registradas.</p>
+                                                        <p class="text-danger">No ha selecionado una mesa</p>
                                                     </div>
                                                 @endforelse
 
@@ -78,7 +78,7 @@
                                                 <div class="col-12">
                                                     <button type="button" class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold"
                                                         data-bs-toggle="modal" data-bs-target="#addAddressModal">
-                                                        Agregar nueva dirección
+                                                        Selecione una Mesa
                                                     </button>
                                                 </div>
                                             </div>
@@ -166,7 +166,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-4">
+            <div class="col-lg-8">
                 <div class="right-side-summery-box">
 
                     @php
@@ -177,14 +177,14 @@
 
                     <div class="summery-box-2">
                         <div class="summery-header">
-                            <h3>Detalle de Compra</h3>
+                            <h3>Detalle del Pedido</h3>
                         </div>
 
                         <ul class="summery-contain">
                             @foreach ($cartItems as $item)
                                 <li>
-                                    <img src="{{ asset('storage/' . $item->product->image) }}" class="img-fluid blur-up lazyloaded checkout-image" alt="{{ $item->product->name }}">
-                                    <h4>{{ $item->product->name }} <span>X {{ $item->quantity }}</span></h4>
+                                   {{--  <img src="{{ asset('storage/' . $item->product->image) }}" class="img-fluid blur-up lazyloaded checkout-image" alt="{{ $item->product->name }}"> --}}
+                                    <h4><span> {{ $item->quantity }} -->  </span> {{ $item->product->name }} </h4>
                                     <h4 class="price">$ {{ number_format($item->sub_total, 2) }}</h4>
                                 </li>
                             @endforeach

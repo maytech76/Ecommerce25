@@ -18,12 +18,12 @@ class UserSeeder extends Seeder
     {
         // Crear el usuario administrador
         User::create([
-            'name' => 'Administrador',
-            'email' => 'administrador@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '123456789',
+            'name' => 'Marco Antonio',
+            'email' => 'staroffic@gmail.com',
+            'password' => Hash::make('01020304'),
+            'phone' => '0102030405',
             'role' => 'admin',
-            'address' => 'Dirección del Administrador'
+            'address' => 'Administrador'
         ]);
 
         // Crear 40 usuarios aleatorios sin factory

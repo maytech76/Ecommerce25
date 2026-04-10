@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 use App\Models\Product;
+
 
 class HomeController extends Controller
 {
@@ -15,6 +17,8 @@ class HomeController extends Controller
             ->take(12) // Tomar solo 24 productos
             ->get();
 
-        return view('welcome', compact('topSellingProducts'));
+        $categories = Category::all();
+
+        return view('welcome', compact('topSellingProducts' , 'categories'));
     }
 }

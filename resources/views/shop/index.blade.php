@@ -102,11 +102,11 @@
                                         <ul class="category-list custom-padding">
                                             @php
                                                 $priceRanges = [
-                                                    '5-100' => '$ 5 - $ 100',
-                                                    '101-200' => '$ 101 - $ 200',
-                                                    '201-300' => '$ 201 - $ 300',
-                                                    '301-400' => '$ 301 - $ 400',
-                                                    '401-500' => '$ 401 - $ 500',
+                                                    '1-5' => '$ 1 - $ 5',
+                                                    '5-10' => '$ 5 - $ 10',
+                                                    '10-20' => '$ 10 - $ 20',
+                                                    '20-30' => '$ 20 - $ 30',
+                                                    '30-4' => '$ 30 - $ 40',
                                                 ];
                                             @endphp
                                             @foreach ($priceRanges as $range => $label)
@@ -127,7 +127,7 @@
                             </div>
 
                             <!-- Filtro por Rating -->
-                            <div class="accordion-item">
+                            {{-- <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix">
                                         <span>Rating</span>
@@ -158,7 +158,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>
@@ -175,7 +175,11 @@
                     </div>
                 </div>
 
-                <div class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section">
+                <!-- Value Section Start -->
+                @include('partials.value')
+                <!-- Value Section End -->
+
+                <div class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section mt-4">
                     @foreach ($products as $product)
                     <div>
                         <div class="product-box-3 h-100 wow fadeInUp">
@@ -184,7 +188,7 @@
                                     <div class="label-flex">
                                         <button class="btn p-0 wishlist btn-wishlist notifi-wishlist"
                                             onclick="addToWishlist({{ $product->id }}, '{{ asset('storage/' . $product->main_image) }}', '{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}', '{{ $product->price }}' , '{{ $product->name }}')">
-                                            <i class="iconly-Heart icli"></i>
+                                            {{-- <i class="iconly-Heart icli"></i> --}}
                                         </button>
                                     </div>
 
@@ -193,7 +197,7 @@
                                     </a>
 
                                     <ul class="option">
-                                        <li data-bs-toggle="tooltip" data-bs-placement="top" title="Vista Rápida">
+                                        <li data-bs-toggle="tooltip" data-bs-placement="top" title="Detalles">
                                             <a href="{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}">
                                                 <i class="iconly-Show icli"></i>
                                             </a>
@@ -211,13 +215,13 @@
                                             </li>
                                         @endfor
                                     </ul>
-                                    <span class="span-name">{{ $product->brand->name }}</span>
+                                    {{-- <span class="span-name">{{ $product->brand->name }}</span> --}}
                                     <a href="{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}">
                                         <h5><strong>{{ $product->name }}</strong></h5>
                                     </a>
-                                    <p class="text-justify">
-                                        {{ Str::limit($product->description, 67, '...') }}
-                                    </p>
+                                    {{-- <p class="text-justify">
+                                        {{ Str::limit($product->description, 0, '...') }}
+                                    </p> --}}
                                     <h5 class="price theme-color">
                                         $ {{ number_format($product->price, 2) }}
                                         <del>$ {{ number_format($product->price2, 2) }}</del>
@@ -225,9 +229,13 @@
                                     <div class="price-qty">
                                         <div class="counter-number">
                                             <div class="counter">
+
+                                                {{-- icono-restar --}}
                                                 <div class="qty-left-minus" onclick="updateQuantity({{ $product->id }}, 'minus')">
                                                     <i class="fa-solid fa-minus"></i>
                                                 </div>
+
+                                                {{-- Icono Sumar --}}
                                                 <input class="form-control input-number qty-input" type="text" id="qty-{{ $product->id }}" value="1">
                                                 <div class="qty-right-plus" onclick="updateQuantity({{ $product->id }}, 'plus')">
                                                     <i class="fa-solid fa-plus"></i>
@@ -298,6 +306,7 @@
                 </nav>
 
             </div>
+
         </div>
     </div>
 </section>

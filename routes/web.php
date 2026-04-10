@@ -11,15 +11,17 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ShippingAddressController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 
+
 //Cuentas Por Cobrar
 use App\Http\Controllers\ReceivableController;
 use App\Http\Controllers\OldPaymentController;
-
+use App\Http\Controllers\TableController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -65,9 +67,14 @@ Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('
         Route::resource('orders', OrderController::class)->except(['create', 'store']);
         Route::get('/orders/{order}/details', [OrderController::class, 'orderdetails'])->name('orders.orderdetails');
         Route::patch('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
-      
+        //Tables c
+        Route::resource('/tables', TableController::class);
+        Route::post('/tables/{id}/activate', [TableController::class, 'activate'])->name('tables.activate');
 
         Route::resource('users', UserController::class);
+
+        // Rutas datos de la compañia
+        Route:: resource('companies', CompanyController::class);
       
     });
 

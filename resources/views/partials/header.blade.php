@@ -1,10 +1,10 @@
 <header class="header-2">
-    <div class="header-notification theme-bg-color overflow-hidden py-2">
+    {{-- <div class="header-notification theme-bg-color overflow-hidden py-2">
         <div class="notification-slider">
             <div>
                 <div class="timer-notification text-center">
                     <h6>
-                        <strong class="me-1">¡Bienvenido a Maydev!</strong>
+                        <strong class="me-1">¡Bienvenido!</strong>
                         Disfruta de nuevas ofertas y regalos todos los días en los fines de semana.
                         <strong class="ms-1">Muchas por Comprar</strong>
                     </h6>
@@ -25,7 +25,7 @@
         <button class="btn close-notification">
             <span>Cerrar</span> <i class="fas fa-times"></i>
         </button>
-    </div>
+    </div> --}}
 
     <div class="top-nav top-header sticky-header sticky-header-3">
         <div class="container-fluid-lg">

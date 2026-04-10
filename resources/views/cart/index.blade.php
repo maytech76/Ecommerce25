@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Carrito')
+@section('title','Pedido')
 
 @section('content')
 <section class="breadcrumb-section pt-0">
@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="breadcrumb-contain">
-                    <h2>🛒 Mi Carrito de Compras</h2>
+                    <h2>comanda</h2>
                     <nav>
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
@@ -17,7 +17,7 @@
                                 </a>
                             </li>
 
-                            <li class="breadcrumb-item active">Carrito de Compras</li>
+                            <li class="breadcrumb-item active">Comanda de pedido</li>
                         </ol>
                     </nav>
                 </div>
@@ -46,7 +46,7 @@
             <div class="col-xxl-3">
                 <div class="summery-box p-sticky">
                     <div class="summery-header">
-                        <h3>Total del Carrito</h3>
+                        <h3>Total</h3>
                     </div>
 
                     <div class="summery-contain">
@@ -74,19 +74,20 @@
                         <ul>
                             <li>
                                 <button class="btn btn-animation proceed-btn fw-bold" onclick="window.location.href='{{ route('cart.checkout') }}'">
-                                    Proceder al Pago
+                                    Proceder pedido
                                 </button>
                             </li>
 
                             <li>
                                 <button class="btn btn-light shopping-button text-dark" onclick="location.href = '/'">
-                                    <i class="fa-solid fa-arrow-left-long"></i> Seguir Comprando
+                                    <i class="fa-solid fa-arrow-left-long"></i> Seguir agregando
                                 </button>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </section>

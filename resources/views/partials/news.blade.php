@@ -6,7 +6,7 @@
                     <img src="{{ asset('assets/images/veg-3/shape/background.png') }}" class="img-fluid bg-img" alt="Fondo de invitación a registro">
 
                     <div class="row">
-                        <div class="col-xxl-8 col-xl-7">
+                        {{-- <div class="col-xxl-8 col-xl-7">
                             <div class="newsletter-detail p-center-left text-white">
                                 <div>
                                     <h2>Únete a nuestra comunidad</h2>
@@ -16,13 +16,13 @@
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-xxl-4 col-xl-5 d-xl-block d-none">
+                        {{-- <div class="col-xxl-4 col-xl-5 d-xl-block d-none">
                             <div class="shape-box">
                                 <img src="{{ asset('assets/images/veg-3/shape/basket.png') }}" alt="Canasta de productos" class="img-fluid image-1">
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
