@@ -63,8 +63,7 @@ class Product extends Model
     /**
      * Boot del modelo
      */
-    protected static function boot()
-    {
+    protected static function boot(){
         parent::boot();
 
         static::saving(function ($product) {
@@ -122,9 +121,7 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    /**
-     * Relación con reviews
-     */
+    /*** Relación con reviews ***/
     public function reviews()
     {
         return $this->hasMany(Review::class);

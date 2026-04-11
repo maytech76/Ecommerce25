@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -66,8 +67,8 @@ class CategoryController extends Controller
     }
 
     
-    public function edit(Category $category)
-    {
+    public function edit(Category $category){
+
         return view('admin.categories.edit', compact('category'));
     }
 
@@ -118,5 +119,43 @@ class CategoryController extends Controller
 
         return redirect()->route('categories.index')
             ->with('success', 'Categoría eliminada exitosamente.');
+    }
+
+   /**
+     * Mostrar productos de una categoría específica
+     */
+    public function showProducts($id)
+    {
+        // Buscar la categoría
+        $category = Category::findOrFail($id);
+        
+        // Obtener productos de esta categoría
+        $products = Product::with(['category', 'brand', 'reviews'])
+            ->where('category_id', $id)
+            ->where('status', true)
+            ->where('stock', '>', 0)
+            ->latest()
+            ->paginate(12);
+        
+        // Obtener todas las categorías para el slider
+        $categories = Category::all();
+        
+        return view('products.category-products', compact('category', 'products', 'categories'));
+    }
+    
+    /**
+     * Mostrar todos los productos (tienda)
+     */
+    public function shop(Request $request)
+    {
+        $products = Product::with(['category', 'brand', 'reviews'])
+            ->where('status', true)
+            ->where('stock', '>', 0)
+            ->latest()
+            ->paginate(12);
+        
+        $categories = Category::all();
+        
+        return view('products.category-products', compact('products', 'categories'));
     }
 }

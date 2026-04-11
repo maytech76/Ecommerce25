@@ -10,15 +10,18 @@ use App\Models\Product;
 
 class HomeController extends Controller
 {
-    public function index() {
+ 
+    public function index(Request $request){
         
-        $topSellingProducts = Product::withCount('orderItems') // Contar la cantidad de veces que un producto se vendió
-            ->orderByDesc('order_items_count') // Ordenar por los más vendidos
-            ->take(12) // Tomar solo 24 productos
-            ->get();
-
         $categories = Category::all();
-
-        return view('welcome', compact('topSellingProducts' , 'categories'));
+        
+        $topSellingProducts = Product::with(['category', 'brand', 'reviews'])
+            ->where('status', true)
+            ->where('stock', '>', 0)
+            ->latest()
+            ->take(12)
+            ->get();
+        
+        return view('welcome', compact('categories', 'topSellingProducts'));
     }
 }

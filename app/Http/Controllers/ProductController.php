@@ -386,16 +386,14 @@ class ProductController extends Controller
         return view('products.details', compact('product', 'topSellingProducts'));
     }
 
-    public function getTopSellingProducts($limit = 6)
-    {
+    public function getTopSellingProducts($limit = 6){
         return Product::withCount('orderItems')
             ->orderByDesc('order_items_count')
             ->take($limit)
             ->get();
     }
 
-    public function shop(Request $request)
-    {
+    public function shop(Request $request){
         // Convertir las categorías en un array si están en formato "1,2,3"
         $categoriesFilter = $request->has('categories')
             ? explode(',', $request->input('categories'))
@@ -449,5 +447,90 @@ class ProductController extends Controller
         $brands = Brand::all();
 
         return view('shop.index', compact('products','brands', 'categories', 'categoriesFilter', 'brandsFilter','pricesFilter','ratingsFilter', 'search'));
+    }
+
+    /**
+     * Obtener productos por categoría (AJAX)
+     */
+    public function getProductsByCategory(Request $request){
+        try {
+            $categoryId = $request->get('category');
+            
+            Log::info('getProductsByCategory called', ['category_id' => $categoryId]);
+            
+            $products = Product::with(['category', 'brand', 'reviews'])
+                ->where('status', true)
+                ->where('stock', '>', 0);
+                
+            if ($categoryId) {
+                $products->where('category_id', $categoryId);
+            }
+            
+            $products = $products->latest()->take(12)->get();
+            
+            Log::info('Products found', ['count' => $products->count()]);
+            
+            // Verificar si la vista existe
+            if (!view()->exists('partials.product-list')) {
+                Log::error('View partials.product-list does not exist');
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Vista no encontrada'
+                ], 500);
+            }
+            
+            $html = view('partials.product-list', compact('products'))->render();
+            
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'count' => $products->count()
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error in getProductsByCategory', [
+                'message' => $e->getMessage(),
+                'line' => $e->getLine()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Obtener todos los productos (AJAX)
+     */
+    public function getAllProducts(){
+        
+        try {
+            $products = Product::with(['category', 'brand', 'reviews'])
+                ->where('status', true)
+                ->where('stock', '>', 0)
+                ->latest()
+                ->take(12)
+                ->get();
+                
+            $html = view('partials.product-list', compact('products'))->render();
+            
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'count' => $products->count()
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error in getAllProducts', [
+                'message' => $e->getMessage(),
+                'line' => $e->getLine()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
