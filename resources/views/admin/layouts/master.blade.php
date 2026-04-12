@@ -24,9 +24,14 @@
             <!-- Page Body Start-->
             <div class="page-body-wrapper">
 
-                <!-- Page Sidebar Start-->
-                @include('admin.partials2.sidebar')
-                <!-- Page Sidebar Ends-->
+                @php
+                 $companyData = App\Models\Company::first();
+                @endphp
+
+                  <!-- Page Sidebar Start-->
+                @include('admin.partials2.sidebar', ['companyData' => $companyData])
+                  <!-- Page Sidebar Ends-->
+                
 
             
                 @yield('content')

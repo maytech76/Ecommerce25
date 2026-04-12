@@ -11,35 +11,35 @@ class CityController extends Controller
 {
     public function index(){
         $cities = City::withCount('zones')->latest()->paginate(4);
-        return view('cities.index', compact('cities'));
+        return view('admin.cities.index', compact('cities'));
     } 
 
     public function create(){
-        return view('cities.create');
+        return view('admin.cities.create');
     }
 
     public function store(Request $request){
+
         $request->validate([
-            'city_name' => 'required|string|max:255',
-            'zones' => 'required|array|min:1',
-            'zones.*.name' => 'required|string|max:255',
-            'zones.*.price' => 'required|numeric|min:0',
+            'city_name' => 'required|string|max:100|unique:cities,name'
         ]);
 
         $city = City::create([
             'name' => $request->city_name
         ]);
 
-        foreach ($request->zones as $zoneData) {
-            Zone::create([
-                'name' => $zoneData['name'],
-                'price' => $zoneData['price'],
-                'city_id' => $city->id
+        // Para peticiones AJAX
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Ciudad creada exitosamente',
+                'data' => $city
             ]);
         }
 
+        // Para peticiones normales
         return redirect()->route('cities.index')
-            ->with('success', 'Ciudad y zonas creadas exitosamente.');
+            ->with('success', 'Ciudad creada exitosamente.');
     }
 
     public function show(City $city){
@@ -113,12 +113,127 @@ class CityController extends Controller
         }
     }
 
-   /*  public function getZones($cityId){
-        $zones = Zone::where('city_id', $cityId)
-            ->orderBy('price')
-            ->paginate(10)
-            ->get();
+   /**
+     * Desactivar ciudad (cambiar status a 0)
+     * ============================================
+     * Este método cambia el status de la ciudad a 0 (inactiva)
+     * También puede desactivar las zonas asociadas si se desea
+     * ============================================
+     */
+    public function deactivate($id){
+        try {
+            $city = City::findOrFail($id);
+            
+            // Cambiar status a 0 (inactiva)
+            $city->status = 0;
+            $city->save();
+            
+            // OPCIONAL: También desactivar todas las zonas asociadas
+            // Descomentar la siguiente línea si quieres desactivar las zonas automáticamente
+            // $city->zones()->update(['status' => 0]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => "La ciudad '{$city->name}' ha sido desactivada exitosamente.",
+                'data' => [
+                    'id' => $city->id,
+                    'name' => $city->name,
+                    'status' => $city->status
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al desactivar la ciudad: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 
-        return response()->json($zones);
-    } */
+    /**
+     * Activar ciudad (cambiar status a 1)
+     * Método complementario para reactivar ciudades
+     */
+    public function activate($id){
+
+        try {
+            $city = City::findOrFail($id);
+            
+            // Cambiar status a 1 (activa)
+            $city->status = 1;
+            $city->save();
+            
+            return response()->json([
+                'success' => true,
+                'message' => "La ciudad '{$city->name}' ha sido activada exitosamente.",
+                'data' => [
+                    'id' => $city->id,
+                    'name' => $city->name,
+                    'status' => $city->status
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al activar la ciudad: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get city data for editing (AJAX)
+     */
+    public function getEditData($id){
+        
+        try {
+            $city = City::findOrFail($id);
+            
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $city->id,
+                    'name' => $city->name,
+                    'status' => $city->status
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ciudad no encontrada'
+            ], 404);
+        }
+    }
+
+    /**
+ * Update the specified resource in storage.
+ */
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'name' => 'required|string|max:100|unique:cities,name,' . $id
+    ]);
+
+    $city = City::findOrFail($id);
+    $city->update([
+        'name' => $request->name,
+        'status' => $request->status ?? $city->status
+    ]);
+
+    // Para peticiones AJAX
+    if ($request->ajax()) {
+        return response()->json([
+            'success' => true,
+            'message' => "Ciudad '{$city->name}' actualizada exitosamente",
+            'data' => $city
+        ]);
+    }
+
+    // Para peticiones normales
+    return redirect()->route('cities.index')
+        ->with('success', 'Ciudad actualizada exitosamente.');
+}
+
+
+
 }

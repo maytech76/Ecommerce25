@@ -17,6 +17,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReceivableController;
 use App\Http\Controllers\OldPaymentController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\ZoneController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,38 +58,55 @@ Route::middleware('auth')->group(function () {
         
         Route::resource('/products', ProductController::class);
         Route::resource('/categories', CategoryController::class);
+
+         // Rutas para Citys
         Route::resource('/cities', CityController::class);
         Route::get('/cities/{id}/details', [CityController::class, 'getCityDetails'])->name('cities.details');
+        Route::put('/cities/{id}/deactivate', [CityController::class, 'deactivate'])->name('cities.deactivate');
+        Route::put('/cities/{id}/activate', [CityController::class, 'activate'])->name('cities.activate');
+        Route::get('/cities/{id}/edit-data', [CityController::class, 'getEditData'])->name('cities.edit-data');
+
+        // Rutas para Zonas
+        Route::resource('/zones', ZoneController::class);
+        Route::get('/zones/{id}/edit-data', [ZoneController::class, 'getEditData'])->name('zones.edit-data');
+        Route::put('/zones/{id}/deactivate', [ZoneController::class, 'deactivate'])->name('zones.deactivate');
+        Route::put('/zones/{id}/activate', [ZoneController::class, 'activate'])->name('zones.activate');
+        Route::get('/zones-by-city/{cityId}', [ZoneController::class, 'getZonesByCity'])->name('zones.by-city');
+        Route::get('/all-zones', [ZoneController::class, 'getAllZones'])->name('zones.all');
+
+         // Rutas para Orders
         Route::resource('orders', OrderController::class)->except(['create', 'store']);
         Route::get('/orders/{order}/details', [OrderController::class, 'orderdetails'])->name('orders.orderdetails');
         Route::patch('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
-        Route::resource('/tables', TableController::class);
+
+        Route::get('/tables/gestion', [TableController::class, 'gestion'])->name('tables.gestion');
         Route::post('/tables/{id}/activate', [TableController::class, 'activate'])->name('tables.activate');
+        Route::resource('/tables', TableController::class);
         Route::resource('users', UserController::class);
         Route::resource('companies', CompanyController::class);
     });
 
-    // Rutas de usuario
-    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::post('/sync/cart-wishlist', [CartController::class, 'syncCartWishlist'])->name('sync.cart.wishlist');
-    Route::delete('/cart/{product_id}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::delete('/wishlist/{product_id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
-    Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-    Route::post('/shipping-address', [ShippingAddressController::class, 'store'])->name('shipping.store');
-    Route::post('/checkout/stripe', [PaymentController::class, 'checkout'])->name('stripe.checkout');
-    Route::get('/checkout/success', [PaymentController::class, 'success'])->name('checkout.success');
-    Route::get('/checkout/cancel', [PaymentController::class, 'cancel'])->name('checkout.cancel');
-    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-    Route::post('/dashboard/address', [ShippingAddressController::class, 'storeAddress'])->name('address.store');
-    Route::put('/dashboard/address/{id}', [ShippingAddressController::class, 'updateAddress'])->name('address.update');
-    Route::delete('/dashboard/address/{id}', [ShippingAddressController::class, 'destroyAddress'])->name('address.destroy');
-    Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
-    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-    Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.my-orders');
-    Route::get('/dispatched/{order}', [OrderController::class, 'ordedispatched'])->name('dispatched.ordedispatched');
+        // Rutas de usuario
+        Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::post('/sync/cart-wishlist', [CartController::class, 'syncCartWishlist'])->name('sync.cart.wishlist');
+        Route::delete('/cart/{product_id}', [CartController::class, 'remove'])->name('cart.remove');
+        Route::delete('/wishlist/{product_id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+        Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+        Route::post('/shipping-address', [ShippingAddressController::class, 'store'])->name('shipping.store');
+        Route::post('/checkout/stripe', [PaymentController::class, 'checkout'])->name('stripe.checkout');
+        Route::get('/checkout/success', [PaymentController::class, 'success'])->name('checkout.success');
+        Route::get('/checkout/cancel', [PaymentController::class, 'cancel'])->name('checkout.cancel');
+        Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+        Route::post('/dashboard/address', [ShippingAddressController::class, 'storeAddress'])->name('address.store');
+        Route::put('/dashboard/address/{id}', [ShippingAddressController::class, 'updateAddress'])->name('address.update');
+        Route::delete('/dashboard/address/{id}', [ShippingAddressController::class, 'destroyAddress'])->name('address.destroy');
+        Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+        Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.my-orders');
+        Route::get('/dispatched/{order}', [OrderController::class, 'ordedispatched'])->name('dispatched.ordedispatched');
 
     // Módulo Cuentas por Cobrar
     Route::middleware(['role:admin'])->group(function () {

@@ -24,6 +24,16 @@ class TableController extends Controller
         }
     }
 
+
+    public function gestion(){
+
+
+        $tables = Table::all();
+
+        return view('admin.tables.gestion', compact('tables'));
+
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -163,8 +173,7 @@ class TableController extends Controller
     /**
      * Remove the specified resource from storage (soft delete via status).
      */
-    public function destroy(string $id)
-    {
+    public function destroy(string $id){
         DB::beginTransaction();
         
         try {
@@ -197,8 +206,7 @@ class TableController extends Controller
     /**
      * Activar una mesa previamente inactiva
      */
-    public function activate(string $id)
-    {
+    public function activate(string $id){
         DB::beginTransaction();
         
         try {
