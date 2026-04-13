@@ -4,6 +4,7 @@
         <div class="logo-wrapper logo-wrapper-center">
             <a href="/" data-bs-original-title="" title="">
                 @if(isset($companyData) && $companyData && $companyData->logo)
+                
                     <img class="img-fluid for-white mb-2" src="{{ asset('storage/' . $companyData->logo) }}" alt="{{ $companyData->name }}">
                 @else
                     <img class="img-fluid for-white" src="assets/images/logo/full-white.png" alt="logo">

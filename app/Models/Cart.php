@@ -12,6 +12,7 @@ class Cart extends Model
     protected $table = 'cart'; // Nombre de la tabla
 
     protected $fillable = [
+        
         'user_id',
         'product_id',
         'quantity',

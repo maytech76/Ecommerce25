@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Checkout')
+@section('title','Seleccionar Mesa')
 
 @section('content')
 <section class="breadcrumb-section pt-0">
@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="breadcrumb-contain">
-                    <h2>Pedido</h2>
+                    <h2>Seleccionar Mesa</h2>
                     <nav>
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
@@ -16,8 +16,7 @@
                                     <i class="fa-solid fa-house"></i>
                                 </a>
                             </li>
-
-                            <li class="breadcrumb-item active">Pedido</li>
+                            <li class="breadcrumb-item active">Seleccionar Mesa</li>
                         </ol>
                     </nav>
                 </div>
@@ -28,12 +27,14 @@
 
 <section class="checkout-section-2 section-b-space">
     <div class="container-fluid-lg">
-        <div class="row g-sm-4 g-3">
-            <div class="col-lg-4">
+        <div class="row">
+            <div class="col-12">
                 <div class="left-sidebar-checkout">
-
-                    <form action="{{ route('stripe.checkout') }}" method="POST">
+                    
+                    <form action="{{ route('order.store') }}" method="POST" id="orderForm">
+                        
                         @csrf
+                        
                         <div class="checkout-detail-box">
                             <ul>
                                 <li>
@@ -43,120 +44,63 @@
                                     </div>
 
                                     <div class="checkout-box">
-                                        <div class="checkout-title">
-                                            <h4>Selecione una Mesa</h4>
+                                        
+                                        <!-- Título de selección de mesa -->
+                                        <div class="select_table_header text-center mb-4">
+                                            <h3>Seleccione una Mesa</h3>
+                                            <p class="text-muted">Elija la mesa donde desea recibir su pedido</p>
                                         </div>
 
-                                        <div class="checkout-detail">
-                                            <div class="row g-4">
-                                                @forelse ($addresses as $address)
-                                                    <div class="col-xxl-6 col-lg-12 col-md-6">
-                                                        <div class="delivery-address-box">
-                                                            <div>
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="radio" name="user_address_id"
-                                                                        id="address-{{ $address->id }}" value="{{ $address->id }}" required>
-                                                                </div>
+                                        <!-- SELECT para elegir mesa -->
+                                        <div class="form-group mb-4">
+                                            <label for="table_id" class="form-label fw-bold fs-5">
+                                                <i class="fa-solid fa-table me-2"></i>Mesas Disponibles:
+                                            </label>
+                                            <select name="table_id" id="table_id" class="form-select form-select-lg" required>
+                                                <option value="">-- Seleccione una mesa --</option>
+                                                @isset($tables)
+                                                    @foreach($tables as $table)
+                                                        @if($table->status == 'disponible' || $table->status == 'available')
+                                                            <option value="{{ $table->id }}" 
+                                                                {{ (old('table_id', $selectedTableId ?? '') == $table->id) ? 'selected' : '' }}>
+                                                                {{ $table->name }} - Capacidad: {{ $table->capacity }} personas 
+                                                                @if(isset($table->description))
+                                                                    - {{ $table->description }}
+                                                                @endif
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                @endisset
+                                            </select>
+                                            <small class="text-muted">
+                                                <i class="fa-solid fa-info-circle"></i> Solo se muestran mesas con estado "disponible"
+                                            </small>
+                                        </div>
 
-                                                                <ul class="delivery-address-detail">
-                                                                    <li><h4 class="fw-500">{{ $address->address }}</h4></li>
-                                                                    <li><p class="text-content"><span class="text-title">Ciudad:</span> {{ $address->city }}</p></li>
-                                                                    <li><h6 class="text-content"><span class="text-title">Estado:</span> {{ $address->state }}</h6></li>
-                                                                    <li><h6 class="text-content"><span class="text-title">Código Postal:</span> {{ $address->postal_code }}</h6></li>
-                                                                    <li><h6 class="text-content"><span class="text-title">País:</span> {{ $address->country }}</h6></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @empty
-                                                    <div class="col-12">
-                                                        <p class="text-danger">No ha selecionado una mesa</p>
-                                                    </div>
-                                                @endforelse
-
-                                                <!-- Botón para mostrar el modal -->
-                                                <div class="col-12">
-                                                    <button type="button" class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold"
-                                                        data-bs-toggle="modal" data-bs-target="#addAddressModal">
-                                                        Selecione una Mesa
-                                                    </button>
+                                        <!-- Mostrar mesa seleccionada actualmente -->
+                                        <div id="selectedTableDisplay" class="mt-3">
+                                            @if(isset($selectedTable) && $selectedTable)
+                                                <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                                                    <i class="fa-solid fa-check-circle"></i> 
+                                                    Mesa seleccionada: <strong>{{ $selectedTable->name }}</strong>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="checkout-icon">
-                                        <lord-icon target=".nav-item" src="../../oaflahpk.json" trigger="loop-on-hover" colors="primary:#0baf9a" class="lord-icon">
-                                        </lord-icon>
-                                    </div>
-                                    <div class="checkout-box">
-                                        <div class="checkout-title">
-                                            <h4>Opción de Envió</h4>
+                                            @endif
                                         </div>
 
-                                        <div class="checkout-detail">
-                                            <div class="row g-4">
-                                                <div class="col-xxl-12">
-                                                    <div class="delivery-option">
-                                                        <div class="delivery-category">
-                                                            <div class="shipment-detail">
-                                                                <div class="form-check custom-form-check hide-check-box">
-                                                                    <input class="form-check-input" type="radio" name="standard" id="standard" checked="">
-                                                                    <label class="form-check-label" for="standard">Envio Normal</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12 future-box">
-                                                    <div class="future-option">
-                                                        <div class="row g-md-0 gy-4">
-                                                            <div class="col-md-6">
-                                                                <div class="delivery-items">
-                                                                    <div>
-                                                                        <h5 class="items text-content"><span>3
-                                                                                Items</span>@
-                                                                            $693.48</h5>
-                                                                        <h5 class="charge text-content">Delivery Charge
-                                                                            $34.67
-                                                                            <button type="button" class="btn p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Extra Charge">
-                                                                                <i class="fa-solid fa-circle-exclamation"></i>
-                                                                            </button>
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-6">
-                                                                <form class="form-floating theme-form-floating date-box">
-                                                                    <input type="date" class="form-control">
-                                                                    <label>Select Date</label>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </li>
 
-                                <li>
+                                <li class="mt-4">
                                     <div class="checkout-icon">
                                         <lord-icon target=".nav-item" src="../../qmcsqnle.json" trigger="loop-on-hover" colors="primary:#0baf9a,secondary:#0baf9a" class="lord-icon">
                                         </lord-icon>
                                     </div>
                                     <div class="checkout-box">
                                         <div class="checkout-detail">
-
-                                            <button type="submit" class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">
-                                                Pagar con Stripe
+                                            <button type="submit" class="btn theme-bg-color text-white btn-lg w-100 fw-bold" id="submitOrderBtn">
+                                                <i class="fa-solid fa-clipboard-list me-2"></i> Procesar Pedido
                                             </button>
-
                                         </div>
                                     </div>
                                 </li>
@@ -165,14 +109,19 @@
                     </form>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
 
-            <div class="col-lg-8">
+<!-- Resumen del pedido -->
+<section class="summery-section mt-4">
+    <div class="container-fluid-lg">
+        <div class="row">
+            <div class="col-12">
                 <div class="right-side-summery-box">
-
                     @php
-                        $shippingCost = 6.90;
                         $subTotal = $cartItems->sum('sub_total');
-                        $total = $subTotal + $shippingCost;
+                        $total = $subTotal; // Sin costo de envío
                     @endphp
 
                     <div class="summery-box-2">
@@ -183,8 +132,10 @@
                         <ul class="summery-contain">
                             @foreach ($cartItems as $item)
                                 <li>
-                                   {{--  <img src="{{ asset('storage/' . $item->product->image) }}" class="img-fluid blur-up lazyloaded checkout-image" alt="{{ $item->product->name }}"> --}}
-                                    <h4><span> {{ $item->quantity }} -->  </span> {{ $item->product->name }} </h4>
+                                    @if($item->product->image)
+                                        <img src="{{ asset('storage/' . $item->product->image) }}" class="img-fluid blur-up lazyloaded checkout-image" alt="{{ $item->product->name }}">
+                                    @endif
+                                    <h4><span>{{ $item->quantity }} x </span> {{ $item->product->name }} </h4>
                                     <h4 class="price">$ {{ number_format($item->sub_total, 2) }}</h4>
                                 </li>
                             @endforeach
@@ -195,65 +146,121 @@
                                 <h4>Subtotal</h4>
                                 <h4 class="price">$ {{ number_format($subTotal, 2) }}</h4>
                             </li>
-
-                            <li>
-                                <h4>Envio</h4>
-                                <h4 class="price">$ {{ number_format($shippingCost, 2) }}</h4>
-                            </li>
-                            <br>
-
-                            <li class="list-total">
+                            
+                            <li class="list-total mt-2 pt-2 border-top">
                                 <h4>Total (USD)</h4>
                                 <h4 class="price">$ {{ number_format($total, 2) }}</h4>
                             </li>
                         </ul>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
 </section>
 
-<!-- Modal para agregar dirección -->
-<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <form action="{{ route('shipping.store') }}" method="POST">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addAddressModalLabel">Nueva Dirección</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-2">
-                        <label>Dirección</label>
-                        <input type="text" name="address" class="form-control" required>
-                    </div>
-                    <div class="mb-2">
-                        <label>Ciudad</label>
-                        <input type="text" name="city" class="form-control" required>
-                    </div>
-                    <div class="mb-2">
-                        <label>Estado</label>
-                        <input type="text" name="state" class="form-control" required>
-                    </div>
-                    <div class="mb-2">
-                        <label>Código Postal</label>
-                        <input type="text" name="zip_code" class="form-control" required>
-                    </div>
-                    <div class="mb-2">
-                        <label>País</label>
-                        <input type="text" name="country" class="form-control" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Guardar Dirección</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+@endsection
 
+@section('scripts')
+<script>
+    // Actualizar la visualización cuando se selecciona una mesa
+    document.getElementById('table_id')?.addEventListener('change', function() {
+        const select = this;
+        const selectedOption = select.options[select.selectedIndex];
+        const tableName = selectedOption.text;
+        const tableId = select.value;
+        
+        const displayDiv = document.getElementById('selectedTableDisplay');
+        
+        if (tableId) {
+            displayDiv.innerHTML = `
+                <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                    <i class="fa-solid fa-check-circle"></i> 
+                    Mesa seleccionada: <strong>${tableName}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+        } else {
+            displayDiv.innerHTML = '';
+        }
+    });
+    
+    // Validar el formulario antes de enviar
+    document.getElementById('orderForm')?.addEventListener('submit', function(e) {
+        const tableId = document.getElementById('table_id').value;
+        
+        if (!tableId) {
+            e.preventDefault();
+            alert('⚠️ Por favor, seleccione una mesa antes de continuar');
+            document.getElementById('table_id').focus();
+            return false;
+        }
+        
+        if (confirm('¿Está seguro de procesar el pedido para esta mesa?')) {
+            const submitBtn = document.getElementById('submitOrderBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Procesando...';
+            return true;
+        }
+        
+        e.preventDefault();
+        return false;
+    });
+    
+    // Mostrar mensajes de sesión
+    document.addEventListener('DOMContentLoaded', function() {
+        @if(session('error'))
+            alert('❌ {{ session('error') }}');
+        @endif
+        
+        @if(session('success'))
+            alert('✅ {{ session('success') }}');
+        @endif
+    });
+</script>
+
+<style>
+    .theme-bg-color {
+        background: linear-gradient(135deg, #0baf9a 0%, #0d9488 100%);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    
+    .theme-bg-color:hover {
+        background: linear-gradient(135deg, #0d9488 0%, #0baf9a 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(11, 175, 154, 0.3);
+    }
+    
+    .form-select, .form-select-lg {
+        padding: 12px 16px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+    
+    .form-select:focus {
+        border-color: #0baf9a;
+        box-shadow: 0 0 0 0.2rem rgba(11, 175, 154, 0.25);
+    }
+    
+    .checkout-image {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .alert-success {
+        background-color: #e6f7f5;
+        border-color: #0baf9a;
+        color: #0d5c54;
+    }
+    
+    .btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+</style>
 @endsection

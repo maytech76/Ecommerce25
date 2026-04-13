@@ -43,4 +43,10 @@ class Table extends Model
     {
         return $this->status !== 'inactiva';
     }
+
+    // Relación con órdenes
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

@@ -10,28 +10,22 @@
             <div class="container-fluid">
                 <div class="page-title">
                     <div class="row">
+
                         <div class="col-6">
                             <h3>Gestión de Mesas</h3>
                         </div>
-                        <div class="col-6">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="{{ route('admin.dashboard') }}">
-                                        <i class="fa fa-home"></i>
-                                    </a>
-                                </li>
-                            </ol>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
 
             <!-- Visualización de Mesas en Cuadros -->
-            <div class="container-fluid mt-4">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-body">
+
                                 <div class="tables-grid">
                                     @forelse($tables as $table)
                                     <div class="table-card 
@@ -89,6 +83,7 @@
                                         </div>
                                     @endforelse
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -101,15 +96,15 @@
 <style>
     .tables-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 20px;
-        padding: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 15px;
+        padding: 10px;
     }
     
     /* Estilos base de la card */
     .table-card {
         border-radius: 15px;
-        padding: 20px;
+        padding: 15px;
         text-align: center;
         cursor: pointer;
         transition: all 0.3s ease;

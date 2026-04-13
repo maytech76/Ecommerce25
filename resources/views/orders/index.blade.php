@@ -15,11 +15,7 @@
                         <div class="card card-table">
                             <div class="card-body">
                                 <div class="title-header option-title d-flex align-items-center justify-content-between">
-                                    <h5 class="mb-0">Listado de Ordenes</h5>
-                                    <a href="{{-- {{route('orders.create')}} --}}" class="btn btn-theme d-flex align-items-center">
-                                        <i data-feather="plus-square" class="me-1"></i>
-                                        <span>+ Nueva Orden</span>
-                                    </a>
+                                    <h5 class="mb-0">Ordenes de preparación</h5>
                                 </div>
 
                                 @if(session('success'))
@@ -36,7 +32,7 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Usuario</th>
+                                                <th>Emisor(a)</th>
                                                 <th>Total</th>
                                                 <th>Estado</th>
                                                 <th>Fecha</th>
@@ -51,41 +47,51 @@
                                                 <td>${{ number_format($order->total_price, 2) }}</td>
                                                 <td>
                                                     @if($order->status == 'pending')
-                                                        <span class="badge bg-warning">Pendiente</span>
-                                                    @elseif($order->status == 'paid')
-                                                        <span class="badge bg-success">Pagado</span>
-                                                    @elseif($order->status == 'shipped')
-                                                        <span class="badge bg-primary">Enviado</span>
+                                                        <span class="text-warning">Pendiente</span>
+                                                    @elseif($order->status == 'preparation')
+                                                        <span class="text-success">Preparación</span>
                                                     @elseif($order->status == 'cancelled')
-                                                        <span class="badge bg-danger">Cancelado</span>
+                                                        <span class="text-danger">Cancelado</span>
                                                     @else
                                                         <span class="badge bg-secondary">{{ $order->status }}</span>
                                                     @endif
                                                 </td>
                                                 <td>{{ $order->created_at->format('d/m/Y') }}</td>
-                                                <td>
-                                                    <!-- Cambiar a una estructura más simple -->
-                                                    <div class="d-flex justify-content-center">
-                                                        <a href="{{route('orders.orderdetails', $order->id)}} " 
+                                                <td class="d-flex align-items-center gap-2">
+                                                    <div class="gap-1">
+                                                        <a href="#">
+                                                            <i class="ri-knife-line text-success"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="gap-1">
+                                                        <a href="#">
+                                                            <i class="ri-gift-line text-success gap-1"></i>
+                                                        </a>
+                                                    </div>
+                                                
+                                                    <div class="d-flex gap-1">
+                                                        <a href="{{route('orders.orderdetails', $order->id)}}" 
                                                            class="btn btn-sm" 
                                                            data-order-id="{{ $order->id }}"
                                                            title="Ver detalles"
                                                            data-bs-toggle="tooltip"
-                                                            target="_blank">
+                                                           target="_blank">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
-
-                                                        <a href="{{route('dispatched.ordedispatched', $order->id)}}" class="btn btn-sm" 
-                                                        data-order-id="{{ $order->id }}"
-                                                        title="Despacho">                                                                                           
+                                                
+                                                        <a href="{{route('dispatched.ordedispatched', $order->id)}}" 
+                                                           class="btn btn-sm" 
+                                                           data-order-id="{{ $order->id }}"
+                                                           title="Despacho">                                                                                           
                                                             <i class="ri-file-fill text-warning"></i>
                                                         </a>
-
+                                                
                                                         <a href="{{ route('orders.edit', $order->id) }}" 
                                                            class="btn btn-sm"
                                                            title="Editar">
                                                             <i class="ri-edit-2-line"></i>
                                                         </a>
+                                                        
                                                         <a href="javascript:void(0)" 
                                                            class="btn btn-sm"
                                                            data-bs-toggle="modal" 

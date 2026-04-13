@@ -12,9 +12,12 @@ class Order extends Model
     protected $fillable = [
 
         'user_id',
+        'table_id',
         'user_address_id', 
         'total_price', 
-        'status'];
+        'status'
+    
+    ];
 
 
     protected $casts = [
@@ -45,6 +48,12 @@ class Order extends Model
     public function shippingAddress()
     {
         return $this->belongsTo(ShippingAddress::class, 'user_address_id');
+    }
+
+    // ← Agrega esta relación
+    public function table()
+    {
+        return $this->belongsTo(Table::class);
     }
 
 

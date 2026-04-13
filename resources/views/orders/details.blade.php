@@ -153,16 +153,18 @@
                                                                     'pending' => 'Pendiente',
                                                                     'paid' => 'Pagado',
                                                                     'shipped' => 'Enviado',
-                                                                    'cancelled' => 'Cancelado'
+                                                                    'cancelled' => 'Cancelado',
+                                                                    'preparation' => 'Preparacion'
                                                                 ];
                                                                 $statusColors = [
                                                                     'pending' => 'warning',
                                                                     'paid' => 'success',
                                                                     'shipped' => 'info',
-                                                                    'cancelled' => 'danger'
+                                                                    'cancelled' => 'danger',
+                                                                    'preparation' => 'primary'
                                                                 ];
                                                             @endphp
-                                                            <span class="mx-2 badge bg-{{ $statusColors[$order->status] ?? 'secondary' }}">
+                                                            <span class="mx-2 text-{{ $statusColors[$order->status] ?? 'secondary' }}">
                                                                 {{ $statusLabels[$order->status] ?? ucfirst($order->status) }}
                                                             </span>
                                                         </li>
@@ -171,7 +173,7 @@
                                                     </ul>
 
                                                     <ul class="order-details">
-                                                        <h4 class="mt-4">Cliente</h4>
+                                                        <h4 class="mt-4">Emisor(a)</h4>
                                                         <li><strong>{{ $order->user->name }}</strong></li>
                                                         <li>{{ $order->user->email }}</li>
                                                         @if($order->user->phone)

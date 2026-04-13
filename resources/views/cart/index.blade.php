@@ -58,7 +58,7 @@
 
                             <li class="align-items-start">
                                 <h4>Envío</h4>
-                                <h4 class="price text-end">$6.90</h4>
+                                <h4 class="price text-end">0</h4>
                             </li>
                         </ul>
                     </div>
@@ -73,8 +73,8 @@
                     <div class="button-group cart-button">
                         <ul>
                             <li>
-                                <button class="btn btn-animation proceed-btn fw-bold" onclick="window.location.href='{{ route('cart.checkout') }}'">
-                                    Proceder pedido
+                                <button class="btn btn-animation proceed-btn fw-bold" onclick="window.location.href='{{ route('table.selection') }}'">
+                                    Orden a Cocina
                                 </button>
                             </li>
 

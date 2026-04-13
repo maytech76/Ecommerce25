@@ -58,10 +58,8 @@ class PaymentController extends Controller
 
         Stripe::setApiKey(config('services.stripe.secret'));
 
-        // Validar que se haya seleccionado una mesa y una dirección
         $request->validate([
             'user_address_id' => 'required|exists:shipping_addresses,id',
-            'table_id' => 'required|exists:tables,id', // Validar que la mesa existe
         ]);
 
         $cart = Cart::where('user_id',auth()->id())->with('product')->get();
@@ -70,9 +68,8 @@ class PaymentController extends Controller
             return redirect()->back()->with('error','Tu carrito está vacío');
         }
 
-        // Guardamos la dirección y la mesa en sesión para usarlas después
+        // Guardamos la dirección en sesión para usarla después
         session(['user_address_id' => $request->user_address_id]);
-        session(['selected_table_id' => $request->table_id]); // Guardar la mesa seleccionada
 
         $lineItems = [];
 
@@ -121,13 +118,10 @@ class PaymentController extends Controller
         Log::info('🛒 Items en el carrito: ' . $cart->count());
 
         $addressId = session('user_address_id');
-        $tableId = session('selected_table_id'); // Recuperar la mesa seleccionada
-        
         Log::info('📦 Dirección seleccionada ID: ' . $addressId);
-        Log::info('🪑 Mesa seleccionada ID: ' . $tableId);
 
-        if (!$addressId || !$tableId || $cart->isEmpty()) {
-            Log::warning('❌ Dirección no encontrada, mesa no seleccionada o carrito vacío');
+        if (!$addressId || $cart->isEmpty()) {
+            Log::warning('❌ Dirección no encontrada o carrito vacío');
             return redirect()->route('home')->with('error', 'No se pudo procesar el pedido.');
         }
 
@@ -149,11 +143,11 @@ class PaymentController extends Controller
             ]);
             Log::info('📝 Orden creada con ID: ' . $order->id);
 
-            // Agregar productos (CORREGIDO: eliminado $table->id que no existe)
+            // Agregar productos
             foreach ($cart as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
-                    // 'table_id' => $tableId, // Si OrderItem tiene campo table_id, descomentar
+                    'table_id' => $order->id,
                     'product_id' => $item->product_id,
                     'quantity' => $item->quantity,
                     'price' => $item->price,
@@ -168,7 +162,6 @@ class PaymentController extends Controller
 
             DB::commit();
             session()->forget('user_address_id');
-            session()->forget('selected_table_id'); // Limpiar también la mesa de la sesión
             Log::info('✅ Pedido finalizado correctamente');
 
             // 1. Recuperar el session_id
@@ -184,10 +177,9 @@ class PaymentController extends Controller
             // 3. Obtener detalles del pago (payment intent)
             $paymentIntent = PaymentIntent::retrieve($stripeSession->payment_intent);
 
-            // 4. Crear el registro en payments (AGREGADO: table_id)
+            // 4. Crear el registro en payments
             Payment::create([
                 'order_id' => $order->id,
-                'table_id' => $tableId, // Guardar la mesa seleccionada en el pago
                 'payment_method' => 'stripe',
                 'amount' => ($paymentIntent->amount_received / 100), // Stripe usa centavos
                 'transaction_id' => $paymentIntent->id,
@@ -216,8 +208,6 @@ class PaymentController extends Controller
             $message .= "\n📦 Tu pedido está en camino.\n";
             $message .= "¡Gracias por confiar en nosotros! 🙌";
 
-            // Enviar WhatsApp (descomentar cuando tengas configurado el servicio)
-            // $whatsapp->sendMessage($user->phone, $message);
           
             return view('cart.success', compact('order'));
 
