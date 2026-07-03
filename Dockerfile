@@ -1,23 +1,38 @@
 FROM php:8.3-fpm-alpine
 
-RUN apk add --no-cache git unzip curl libzip-dev libpng-dev libjpeg-turbo-dev freetype-dev \
+# Instalar dependencias del sistema
+RUN apk add --no-cache \
+    git \
+    unzip \
+    curl \
+    libzip-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) pdo_mysql zip gd opcache
+    && docker-php-ext-install -j$(nproc) \
+    pdo_mysql \
+    zip \
+    gd \
+    opcache
 
+# Instalar Composer (para usarlo después)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Establecer directorio de trabajo
 WORKDIR /var/www/html
 
-COPY composer.json ./
-RUN composer install --no-dev --no-interaction --optimize-autoloader --no-scripts --no-progress
-
+# Copiar TODO el código (incluyendo composer.json)
 COPY . .
 
-# ✅ Crear carpetas y asignar permisos
+# ✅ Crear carpetas necesarias (incluso si no existen)
 RUN mkdir -p storage bootstrap/cache
+
+# ✅ Asignar permisos (con verificación)
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-RUN composer run-script post-autoload-dump || true
-RUN php artisan key:generate --force || true
+# ✅ NO ejecutamos Composer aquí, lo haremos manualmente después
 
-CMD ["sh", "-c", "php artisan config:cache && php artisan route:cache && php artisan view:cache && php-fpm -F"]
+# Comando de inicio (sin composer)
+CMD ["sh", "-c", "php-fpm -F"]
