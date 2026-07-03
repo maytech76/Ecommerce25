@@ -122,6 +122,7 @@
                             </li>
                         </ul>
                     </li>
+
                     {{-- Eventos deportivos --}}
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
@@ -136,13 +137,41 @@
                                 <a href="{{route('event_categories.index')}}" data-bs-original-title="" title="">Categorias Sports</a>
                             </li>
                             <li>
-                                <a href="all-users.html" data-bs-original-title="" title="">Atletas</a>
+                                <a href="{{route('athletes.index')}}" data-bs-original-title="" title="">Atletas</a>
                             </li>
                             <li>
                                 <a href="add-new-user.html" data-bs-original-title="" title="">Inscripciones</a>
                             </li>
                             <li>
                                 <a href="add-new-user.html" data-bs-original-title="" title="">Resultados por Evento</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {{-- Modulo de Taller--}}
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title" href="javascript:void(0)" data-bs-original-title="" title="">
+                            <i class="ri-settings-line"></i>
+                            <span>Taller</span>
+                        <div class="according-menu"><i class="ri-arrow-right-s-line"></i></div></a>
+                        <ul class="sidebar-submenu" style="display: none;">
+                            <li>
+                                <a href="#" data-bs-original-title="" title="">Orden de Servios</a>
+                            </li>
+                            <li>
+                                <a href="#" data-bs-original-title="" title="">Bicicleta</a>
+                            </li>
+                            <li>
+                                <a href="#" data-bs-original-title="" title="">Mécanico</a>
+                            </li>
+                            <li>
+                                <a href="#" data-bs-original-title="" title="">Servicios</a>
+                            </li>
+                            <li>
+                                <a href="#" data-bs-original-title="" title="">Repuestos</a>
+                            </li>
+                            <li>
+                                <a href="#" data-bs-original-title="" title="">Comisiones</a>
                             </li>
                         </ul>
                     </li>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AthleteController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -80,6 +81,25 @@ Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('
       
         //Rutas para el modulo de Categorias deportivas
         Route::resource('event_categories', EventCategoryController::class);
+
+        // Grupo de rutas para athletes
+        Route::resource('athletes', AthleteController::class);
+
+        // Rutas adicionales para gestión de estado
+        Route::prefix('athletes')->name('athletes.')->group(function () {
+            
+            // Restaurar atleta inactivo
+            Route::patch('restore/{id}', [AthleteController::class, 'restore'])->name('restore');
+            
+            // Eliminación forzada (solo admin)
+            Route::delete('force-delete/{id}', [AthleteController::class, 'forceDelete'])->name('force-delete');
+            
+            // Ver atletas inactivos
+            Route::get('trashed', [AthleteController::class, 'trashed'])->name('trashed');
+            
+            // Cambiar estado manualmente (opcional)
+            Route::patch('change-status/{id}', [AthleteController::class, 'changeStatus'])->name('change-status');
+        });
 
         // Ruta para verificar duplicados de categorías
         Route::get('/check-category-duplicate', [EventCategoryController::class, 'checkDuplicate'])->name('categories.check-duplicate');

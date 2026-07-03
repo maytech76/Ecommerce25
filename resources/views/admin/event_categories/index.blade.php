@@ -12,9 +12,10 @@
                 <div class="row">
                     <div class="col-sm-12">
                         
-                        <!-- card-Principal -->
+                        {{-- Start Table--}} 
                         <div class="card card-table">
                             <div class="card-body">
+                                
                                 <div class="d-flex align-items-center justify-content-between flex-wrap gap-0 mb-2">
                                     <h3 class="fw-bold">Listado de categorias por evento</h3>
                                     <form class="d-inline-flex">
@@ -47,8 +48,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>Nombre</th>
-                                                    <th>Edad Min</th>
-                                                    <th>Edad Max</th>
+                                                    <th class="text-center">Edad Min</th>
+                                                    <th class="text-center">Edad Max</th>
                                                     <th>Género</th>
                                                     <th>Evento</th>
                                                     <th>Status</th>
@@ -60,8 +61,8 @@
                                                 @forelse ($event_categories as $category)
                                                 <tr>
                                                     <td class="text-start">{{ $category->name }}</td>
-                                                    <td class="text-success">{{ $category->min_age ?? 'N/A' }}</td>
-                                                    <td class="text-warning">{{ $category->max_age ?? 'N/A' }}</td>
+                                                    <td class="text-success text-center">{{ $category->min_age ?? 'N/A' }}</td>
+                                                    <td class="text-warning text-center">{{ $category->max_age ?? 'N/A' }}</td>
                                                     <td>
                                                         @if ($category->gender_restriction == 'MASCULINO')
                                                             <span class="text-primary"><i class="ri-men-line me-1"></i>MASCULINO</span>
@@ -261,11 +262,12 @@
                         <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                 <div class="modal-content">
-                                    <div class="modal-header bg-warning text-white">
+                                    <div class="modal-header" style="background: linear-gradient(135deg, #e8ec99 0%, #a7a52b 100%); color: rgb(22, 22, 22); border-bottom: none;">
+
                                         <h5 class="modal-title" id="editCategoryModalLabel">
-                                            <i class="ri-edit-line me-2"></i>Editar Categoría
+                                            Editar Categoría
                                         </h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                       
                                     </div>
                                     
                                     <form action="" method="POST" id="editCategoryForm">
@@ -350,16 +352,16 @@
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                <i class="ri-close-line me-1"></i>Cancelar
+                                               Cancelar
                                             </button>
-                                            <button type="submit" class="btn btn-warning" id="editBtnSubmit">
-                                                <i class="ri-save-line me-1"></i>Actualizar Categoría
+                                            <button type="submit" class="btn" style="background: #dad709; color: #000;" id="editBtnSubmit">
+                                               Actualizar
                                             </button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                        </div>
+                        </div>{{-- Final Modal editar Categoria --}}
 
                     </div>
                 </div>
@@ -757,7 +759,7 @@
                         
                         isSubmitting = false;
                         submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<i class="ri-save-line me-1"></i>Guardar Categoría';
+                        submitBtn.innerHTML = 'Registar';
                     }
                 })
                 .catch(error => {

@@ -8,11 +8,9 @@ RUN apk add --no-cache \
     libzip-dev \
     libpng-dev \
     libjpeg-turbo-dev \
-    freetype-dev
-
-# Instalar extensiones de PHP
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install -j$(nproc) \
+    freetype-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
     pdo_mysql \
     zip \
     gd \
@@ -24,16 +22,23 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Establecer directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar archivos de composer primero (mejor para caché)
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --optimize-autoloader
+# ✅ CORREGIDO: Copiar composer.json (composer.lock es opcional)
+COPY composer.json ./
+# Si tienes composer.lock, descomenta la siguiente línea
+# COPY composer.lock ./
+
+# ✅ CORREGIDO: Instalar dependencias
+RUN composer install --no-dev --no-interaction --optimize-autoloader --no-scripts
 
 # Copiar el resto de la aplicación
 COPY . .
 
+# ✅ CORREGIDO: Ejecutar scripts de composer
+RUN composer run-script post-autoload-dump || true
+
 # Configurar permisos
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Comandos de inicio
-CMD ["sh", "-c", "php artisan config:cache && php artisan route:cache && php artisan view:cache && php-fpm"]
+CMD ["sh", "-c", "php artisan config:cache && php artisan route:cache && php artisan view:cache && php-fpm -F"]

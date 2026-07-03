@@ -49,3 +49,6 @@
 
     <!-- Theme js -->
     <script src="{{ asset('backend/js/script.js') }}"></script>
+
+    <!-- En el head de tu layout -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
