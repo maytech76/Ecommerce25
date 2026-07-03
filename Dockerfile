@@ -6,10 +6,18 @@ RUN apk add --no-cache git unzip curl libzip-dev libpng-dev libjpeg-turbo-dev fr
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
+
+COPY composer.json ./
+RUN composer install --no-dev --no-interaction --optimize-autoloader --no-scripts --no-progress
+
 COPY . .
 
-# ✅ NO EJECUTAMOS COMPOSER AQUÍ
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# ✅ Crear carpetas y asignar permisos
+RUN mkdir -p storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-CMD ["sh", "-c", "php-fpm -F"]
+RUN composer run-script post-autoload-dump || true
+RUN php artisan key:generate --force || true
+
+CMD ["sh", "-c", "php artisan config:cache && php artisan route:cache && php artisan view:cache && php-fpm -F"]
